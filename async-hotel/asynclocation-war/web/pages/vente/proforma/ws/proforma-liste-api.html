@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Proformas (API)</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8f9fa; }
+        .container { background: #fff; padding: 24px; border-radius: 12px; max-width: 1200px; margin: 32px auto; box-shadow: 0 2px 8px #ccc; }
+        h1 { margin-bottom: 24px; }
+        .filters { margin-bottom: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
+        .filters label { font-weight: bold; margin-right: 4px; }
+        .filters input, .filters select { padding: 4px 8px; }
+        table { border-collapse: collapse; width: 100%; background: #fff; }
+        th, td { border: 1px solid #ccc; padding: 6px; }
+        th { background: #eee; }
+        tfoot td { font-weight: bold; background: #f3f3f3; }
+        .action-link { color: #007bff; text-decoration: underline; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Liste des Proformas (via Web Service)</h1>
+    <div class="filters">
+        <div>
+            <label>Date min</label>
+            <input type="date" id="dateMin">
+        </div>
+        <div>
+            <label>Date max</label>
+            <input type="date" id="dateMax">
+        </div>
+        <div>
+            <label>Client</label>
+            <input type="text" id="client" placeholder="Nom ou ID">
+        </div>
+        <div>
+            <label>État</label>
+            <select id="etat">
+                <option value="">Tous</option>
+                <option value="1">1</option>
+                <option value="11">11</option>
+                <option value="21">21</option>
+                <!-- Ajoute d'autres états si besoin -->
+            </select>
+        </div>
+        <button onclick="chargerProformas()">Rechercher</button>
+    </div>
+    <table id="proformaTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Client</th>
+                <th>Magasin</th>
+                <th>Montant</th>
+                <th>Montant Payé</th>
+                <th>Montant Reste</th>
+                <th>État</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Les lignes seront ajoutées ici -->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" style="text-align:right;">Totaux :</td>
+                <td id="totalMontant">0</td>
+                <td id="totalPaye">0</td>
+                <td id="totalReste">0</td>
+                <td colspan="2"></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<script>
+function chargerProformas() {
+    const dateMin = document.getElementById('dateMin').value;
+    const dateMax = document.getElementById('dateMax').value;
+    const client = document.getElementById('client').value;
+    const etat = document.getElementById('etat').value;
+
+    let url = '/asynclocation/api/proforma/liste?';
+    if (dateMin) url += `dateMin=${encodeURIComponent(dateMin)}&`;
+    if (dateMax) url += `dateMax=${encodeURIComponent(dateMax)}&`;
+    if (client) url += `idClient=${encodeURIComponent(client)}&`;
+    if (etat !== '') url += `etat=${encodeURIComponent(etat)}&`;
+
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.querySelector('#proformaTable tbody');
+            tbody.innerHTML = '';
+            let totalMontant = 0, totalPaye = 0, totalReste = 0;
+            if (data.data && data.data.length > 0) {
+                data.data.forEach(p => {
+                    totalMontant += Number(p.montant || 0);
+                    totalPaye += Number(p.montantPaye || 0);
+                    totalReste += Number(p.montantReste || 0);
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${p.id}</td>
+                        <td>${p.daty || ''}</td>
+                        <td>${p.idClientLib || ''}</td>
+                        <td>${p.idMagasinLib || ''}</td>
+                        <td>${(p.montant || 0).toLocaleString('fr-FR')}</td>
+                        <td>${(p.montantPaye || 0).toLocaleString('fr-FR')}</td>
+                        <td>${(p.montantReste || 0).toLocaleString('fr-FR')}</td>
+                        <td>${p.etatLib || ''}</td>
+                        <td>
+                            <a class="action-link" href="/asynclocation/pages/module.jsp?but=vente/proforma/proforma-fiche.jsp?id=${p.id}" target="_blank">Fiche</a>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">Aucune proforma trouvée</td></tr>';
+            }
+            document.getElementById('totalMontant').textContent = totalMontant.toLocaleString('fr-FR');
+            document.getElementById('totalPaye').textContent = totalPaye.toLocaleString('fr-FR');
+            document.getElementById('totalReste').textContent = totalReste.toLocaleString('fr-FR');
+        });
+}
+
+// Chargement initial
+document.addEventListener('DOMContentLoaded', chargerProformas);
+</script>
+</body>
+</html>

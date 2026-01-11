@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Saisie Proforma (API)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            color: #222;
+        }
+        .container {
+            background: #fff;
+            padding: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+        }
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .card {
+            background: none;
+            border: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+        .card-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .form-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .form-group {
+            flex: 1 1 220px;
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+            color: #444;
+        }
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 7px 10px;
+            border: 1px solid #bbb;
+            border-radius: 2px;
+            font-size: 15px;
+            background: #fafafa;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            margin-bottom: 10px;
+        }
+        th, td {
+            border: 1px solid #eee;
+            padding: 8px 6px;
+            font-size: 14px;
+        }
+        th {
+            background: #f0f0f0;
+            font-weight: bold;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid #bbb;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 14px;
+            background: #f7f7f7;
+            color: #222;
+            margin-right: 5px;
+        }
+        .btn-primary {
+            background: #337ab7;
+            color: #fff;
+            border-color: #337ab7;
+        }
+        .btn-secondary {
+            background: #eee;
+        }
+        .btn-danger {
+            background: #e74c3c;
+            color: #fff;
+            border-color: #e74c3c;
+            font-size: 12px;
+        }
+        .btn-add {
+            background: #27ae60;
+            color: #fff;
+            border-color: #27ae60;
+            margin-bottom: 10px;
+        }
+        .actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 2px;
+            text-align: center;
+            font-size: 15px;
+        }
+        .result.success {
+            background: #eafbe7;
+            color: #20732d;
+            border: 1px solid #b7e1b0;
+        }
+        .result.error {
+            background: #fdeaea;
+            color: #a94442;
+            border: 1px solid #f5c6cb;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #555;
+        }
+        @media (max-width: 700px) {
+            .form-section { flex-direction: column; }
+            .container { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Saisie Proforma</h1>
+        <form id="proformaForm">
+            <div class="card">
+                <div class="card-title">Informations Principales</div>
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" name="daty" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Client</label>
+                        <input list="clients" name="idClient" required placeholder="Sélectionnez un client">
+                        <datalist id="clients"></datalist>
+                    </div>
+                    <div class="form-group">
+                        <label>Désignation</label>
+                        <input type="text" name="designation" placeholder="Titre de la proforma">
+                    </div>
+                    <div class="form-group">
+                        <label>Remarque</label>
+                        <input type="text" name="remarque" placeholder="Remarques ou commentaires">
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Détails Financiers & Logistiques</div>
+                <div class="form-section">
+                    <div class="form-group">
+                        <label>Magasin</label>
+                        <input type="text" name="idMagasin" value="Ankorahotra" required readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Lieu de Location</label>
+                        <input type="text" name="lieuLocation" placeholder="Lieu de location">
+                    </div>
+                    <div class="form-group">
+                        <label>Remise (%)</label>
+                        <input type="number" name="remise" value="0" min="0" max="100" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Caution (%)</label>
+                        <input type="number" name="caution" value="0" min="0" max="100" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Date Début Réservation</label>
+                        <input type="date" name="dateDebutReservation" required>
+                    </div>
+                    <div class="form-group">
+                        <label>État</label>
+                        <input type="number" name="etat" value="0" min="0" max="20">
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Détails des Produits</div>
+                <button type="button" class="btn btn-add" onclick="ajouterProduit()">Ajouter un Produit</button>
+                <table id="produitsTable">
+                    <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th>Désignation</th>
+                            <th>Dimension</th>
+                            <th>Qté (Article)</th>
+                            <th>Qté (Jours)</th>
+                            <th>Prix Unitaire</th>
+                            <th>Unité</th>
+                            <th>Date Début</th>
+                            <th>Image</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="produitsBody"></tbody>
+                </table>
+                <!-- Datalist global pour tous les inputs produits -->
+                <datalist id="produits"></datalist>
+            </div>
+            <div class="actions">
+                <button type="reset" class="btn btn-secondary">Réinitialiser</button>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </form>
+        <div id="loading" class="loading">Traitement en cours...</div>
+        <div id="result" class="result"></div>
+    </div>
+    <script>
+        // Charger les clients pour l'autocomplete
+        fetch('/asynclocation/api/proforma/clients')
+            .then(res => res.json())
+            .then(clients => {
+                const datalist = document.getElementById('clients');
+                clients.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.textContent = c.nom;
+                    datalist.appendChild(opt);
+                });
+            });
+
+        // Charger les produits pour l'autocomplete
+        let produitsList = [];
+        fetch('/asynclocation/api/proforma/produits')
+            .then(res => res.json())
+            .then(produits => {
+                produitsList = produits;
+                // Remplir le datalist global une seule fois
+                const datalist = document.getElementById('produits');
+                datalist.innerHTML = produits.map(p => `<option value="${p.id}">${p.libelle}</option>`).join('');
+            });
+
+        // Ajoute une ligne produit
+        function ajouterProduit() {
+            const tbody = document.getElementById('produitsBody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>
+                    <input list="produits" name="idProduit" required oninput="remplirProduit(this)">
+                </td>
+                <td><input type="text" name="designation"></td>
+                <td><input type="text" name="dimension"></td>
+                <td><input type="number" name="nombre" value="1" min="1" required></td>
+                <td><input type="number" name="qte" value="1" min="1" required></td>
+                <td><input type="number" name="pu" value="0" min="0" required></td>
+                <td><input type="text" name="unite"></td>
+                <td><input type="date" name="dateDebut" required></td>
+                <td><input type="text" name="image"></td>
+                <td><button type="button" class="btn btn-danger" onclick="this.closest('tr').remove()">Supprimer</button></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        // Remplir automatiquement les champs produit
+        function remplirProduit(input) {
+            const val = input.value;
+            const prod = produitsList.find(p => p.id === val);
+            if (prod) {
+                const tr = input.closest('tr');
+                tr.querySelector('input[name="designation"]').value = prod.libelle || '';
+                tr.querySelector('input[name="dimension"]').value = prod.dimension || '';
+                tr.querySelector('input[name="pu"]').value = prod.pu || 0;
+                tr.querySelector('input[name="unite"]').value = prod.unite || '';
+            }
+        }
+
+        // Ajoute une ligne par défaut
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(ajouterProduit, 300);
+        });
+
+        document.getElementById('proformaForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const form = e.target;
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            const data = {
+                daty: form.daty.value,
+                idClient: form.idClient.value,
+                idMagasin: form.idMagasin.value,
+                remarque: form.remarque.value,
+                remise: parseFloat(form.remise.value),
+                caution: parseFloat(form.caution.value),
+                designation: form.designation.value,
+                lieuLocation: form.lieuLocation.value,
+                dateDebutReservation: form.dateDebutReservation.value,
+                etat: parseInt(form.etat.value),
+                details: []
+            };
+            const rows = form.querySelectorAll('#produitsBody tr');
+            rows.forEach(row => {
+                const inputs = row.querySelectorAll('input');
+                data.details.push({
+                    idProduit: inputs[0].value,
+                    designation: inputs[1].value,
+                    dimension: inputs[2].value,
+                    nombre: parseInt(inputs[3].value),
+                    qte: parseInt(inputs[4].value),
+                    pu: parseFloat(inputs[5].value),
+                    unite: inputs[6].value,
+                    dateDebut: inputs[7].value,
+                    image: inputs[8].value
+                });
+            });
+            try {
+                const res = await fetch('/asynclocation/api/proforma/creer', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(data)
+                });
+                let result;
+                try {
+                    const responseText = await res.text();
+                    result = JSON.parse(responseText);
+                } catch (jsonError) {
+                    showResult("Erreur de parsing JSON. Voir console.", false);
+                    return;
+                }
+                if (result.success) {
+                    showResult(`Proforma créé avec succès ! ID: ${result.id}`, true);
+                    form.reset();
+                    document.getElementById('produitsBody').innerHTML = '';
+                    setTimeout(ajouterProduit, 100);
+                } else {
+                    showResult(result.error || "Erreur inconnue", false);
+                }
+            } catch (error) {
+                showResult(`Erreur de connexion: ${error.message}`, false);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        };
+        function showResult(message, isSuccess) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = message;
+            resultDiv.className = 'result ' + (isSuccess ? 'success' : 'error');
+            resultDiv.style.display = 'block';
+            if (isSuccess) {
+                setTimeout(() => {
+                    resultDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
