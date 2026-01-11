@@ -7,13 +7,14 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
-import caisse.Caisse;
 import caisse.MvtCaisseCaution;
+import caution.Caution;
 import caution.CautionLib;
 import reservation.ReservationLib;
 import utilitaire.UtilDB;
-import javax.ws.rs.core.Context;
+import utils.ConstanteLocation;
 
+import javax.ws.rs.core.Context;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -23,16 +24,16 @@ import javax.servlet.http.HttpSession;
 public class CaisseWS {
 
 
-
-@POST
-@Path("/mvt-caution")
+    @POST
+@Path("/mvt-location")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public Response insererMvtCaisseCaution(
+public Response insererMvtCaisseLocation(
     Map<String, Object> data,
     @Context HttpServletRequest request
 ) {
     Connection c = null;
+    boolean estOuvert = false;
     try {
         HttpSession session = request.getSession();
         user.UserEJB u = (user.UserEJB) session.getAttribute("u");
@@ -41,79 +42,196 @@ public Response insererMvtCaisseCaution(
         }
         String userId = u.getUser().getTuppleID();
 
-        c = new utilitaire.UtilDB().GetConn();
-        c.setAutoCommit(false);
+        c = new UtilDB().GetConn();
+        estOuvert = true;
 
-        caisse.MvtCaisseCaution mvt = new caisse.MvtCaisseCaution();
-
-        // Champs obligatoires
         String datyStr = (data.get("daty") != null) ? data.get("daty").toString() : null;
         String designation = (data.get("designation") != null) ? data.get("designation").toString() : null;
         String idCaisse = (data.get("idCaisse") != null) ? data.get("idCaisse").toString() : null;
-        String type = (data.get("type") != null) ? data.get("type").toString() : null;
-        String idcaution = (data.get("idcaution") != null) ? data.get("idcaution").toString() : null;
+        String idOrigine = (data.get("idOrigine") != null) ? data.get("idOrigine").toString() : null; // id de la vente
+        Double montant = (data.get("montant") != null) ? Double.parseDouble(data.get("montant").toString()) : null;
+        String tiers = (data.get("tiers") != null) ? data.get("tiers").toString() : null;
 
-        if (datyStr == null || designation == null || idCaisse == null || type == null || idcaution == null) {
+        if (datyStr == null || designation == null || idCaisse == null || idOrigine == null || montant == null) {
             return Response.status(400).entity("{\"error\":\"Champs obligatoires manquants\"}").build();
         }
 
+        caisse.MvtCaisse mvt = new caisse.MvtCaisse();
+        mvt.setNomTable("MOUVEMENTCAISSE");
         mvt.setDaty(java.sql.Date.valueOf(datyStr));
         mvt.setDesignation(designation);
         mvt.setIdCaisse(idCaisse);
-        mvt.setIdOrigine(idcaution);
-        //mvt.setType_mvt(type);
+        mvt.setCredit(montant);
+        mvt.setDebit(0);
+        mvt.setIdOrigine(idOrigine);
+        mvt.setIdTiers(tiers);
 
-        // Gestion du sens du mouvement
-        double credit = data.get("credit") != null ? Double.parseDouble(data.get("credit").toString()) : 0;
-        double debit = data.get("debit") != null ? Double.parseDouble(data.get("debit").toString()) : 0;
-
-        if ("encaisser".equalsIgnoreCase(type)) { //ampina designatuin
-            mvt.setCredit(credit);
-            mvt.setDebit(0);
-        } else if ("regler".equalsIgnoreCase(type)) { //ampina designatuin
-            mvt.setCredit(0);
-            mvt.setDebit(debit);
-        } else {
-            mvt.setCredit(credit);
-            mvt.setDebit(debit);
-        }
-
-        // Log pour debug
-        System.out.println("[DEBUG] MvtCaisseCaution à insérer :");
-        System.out.println("  idCaisse=" + mvt.getIdCaisse());
-        System.out.println("  idOrigine=" + mvt.getIdOrigine());
-        System.out.println("  daty=" + mvt.getDaty());
-        System.out.println("  designation=" + mvt.getDesignation());
-        System.out.println("  credit=" + mvt.getCredit());
-        System.out.println("  debit=" + mvt.getDebit());
-        System.out.println("  type_mvt=" + mvt.getType_mvt());
-
-        caisse.MvtCaisseCaution inserted = (caisse.MvtCaisseCaution) mvt.createObject(userId, c);
-
-        c.commit();
+        String id = mvt.createObject(userId, c).getTuppleID();
 
         Map<String, Object> resp = new HashMap<>();
         resp.put("success", true);
-        resp.put("id", inserted.getId());
+        resp.put("id", id);
         return Response.ok(resp).build();
+
     } catch (Exception e) {
         e.printStackTrace();
-        if (c != null) try { c.rollback(); } catch (Exception ignore) {}
         Map<String, Object> error = new HashMap<>();
         error.put("success", false);
         error.put("error", e.getMessage());
         return Response.serverError().entity(error).build();
     } finally {
-        if (c != null) try { c.close(); } catch (Exception ignore) {}
+        if (estOuvert && c != null) try { c.close(); } catch (Exception ignore) {}
     }
 }
+
+    @POST
+    @Path("/mvt-caution")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response insererMvtCaisseCaution(
+        Map<String, Object> data,
+        @Context HttpServletRequest request
+    ) {
+        Connection c = null;
+        boolean estOuvert = false;
+        try {
+            HttpSession session = request.getSession();
+            user.UserEJB u = (user.UserEJB) session.getAttribute("u");
+            if (u == null || u.getUser() == null) {
+                return Response.status(401).entity("{\"error\":\"Utilisateur non authentifié\"}").build();
+            }
+            String userId = u.getUser().getTuppleID();
+
+            c = new UtilDB().GetConn();
+            estOuvert = true;
+
+            // Champs obligatoires
+            String datyStr = (data.get("daty") != null) ? data.get("daty").toString() : null;
+            String designation = (data.get("designation") != null) ? data.get("designation").toString() : null;
+            String idCaisse = (data.get("idCaisse") != null) ? data.get("idCaisse").toString() : null;
+            String type = (data.get("type") != null) ? data.get("type").toString() : null;
+            String idcaution = (data.get("idcaution") != null) ? data.get("idcaution").toString() : null;
+
+            if (datyStr == null || designation == null || idCaisse == null || type == null || idcaution == null) {
+                return Response.status(400).entity("{\"error\":\"Champs obligatoires manquants\"}").build();
+            }
+
+            // Récupérer la caution (même logique que apresMvtCaution.jsp)
+            CautionLib cl = (CautionLib) new CautionLib().getById(idcaution, "CautionLib", c);
+            if (cl == null) {
+                return Response.status(400).entity("{\"error\":\"Caution introuvable\"}").build();
+            }
+
+            String id = "";
+
+            if ("regler".equalsIgnoreCase(type)) {
+                // Remboursement (même logique que apresMvtCaution.jsp)
+                MvtCaisseCaution remb = new MvtCaisseCaution();
+                remb.setNomTable("MOUVEMENTCAISSE");
+                remb.setDaty(java.sql.Date.valueOf(datyStr));
+                remb.setDesignation("Paiement remboursement du caution " + idcaution);
+                remb.setIdCaisse(idCaisse);
+                remb.setType_mvt(ConstanteLocation.type_remboursement);
+                remb.setDebit(cl.getMontantgrp());
+                remb.setCredit(0);
+                remb.setIdOrigine(cl.getId());
+                id = remb.createObject(userId, c).getTuppleID();
+
+                // Retenue
+                ReservationLib res = cl.getReservationAvecVerif(c);
+                double montantRetenue = res.getMontantRetenue(cl);
+                double credit = montantRetenue;
+
+                if (credit > 0) {
+                    MvtCaisseCaution retenue = new MvtCaisseCaution();
+                    retenue.setNomTable("MOUVEMENTCAISSE");
+                    retenue.setDaty(java.sql.Date.valueOf(datyStr));
+                    retenue.setDesignation("Paiement retenue du caution " + idcaution);
+                    retenue.setIdCaisse(idCaisse);
+                    retenue.setType_mvt(ConstanteLocation.type_retenue);
+                    retenue.setDebit(0);
+                    retenue.setCredit(credit);
+                    retenue.setIdOrigine(cl.getId());
+                    id = retenue.createObject(userId, c).getTuppleID();
+                }
+
+            } else if ("encaisser".equalsIgnoreCase(type)) {
+                // Encaissement (même logique que apresMvtCaution.jsp)
+                MvtCaisseCaution encaisser = new MvtCaisseCaution();
+                encaisser.setNomTable("MOUVEMENTCAISSE");
+                encaisser.setDaty(java.sql.Date.valueOf(datyStr));
+                encaisser.setDesignation("Paiement encaisser du caution " + idcaution);
+                encaisser.setIdCaisse(idCaisse);
+                encaisser.setType_mvt(ConstanteLocation.type_encaissement);
+                encaisser.setDebit(0);
+                encaisser.setCredit(cl.getMontantgrp());
+                encaisser.setIdOrigine(cl.getId());
+                id = encaisser.createObject(userId, c).getTuppleID();
+            }
+
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("success", true);
+            resp.put("id", id);
+            return Response.ok(resp).build();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("error", e.getMessage());
+            return Response.serverError().entity(error).build();
+        } finally {
+            if (estOuvert && c != null) try { c.close(); } catch (Exception ignore) {}
+        }
+    }
+
+    @GET
+    @Path("/caution-stats")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCautionStats(
+        @QueryParam("idcaution") String idcaution
+    ) {
+        Connection c = null;
+        try {
+            c = new UtilDB().GetConn();
+            CautionLib caution = (CautionLib) new CautionLib().getById(idcaution, "CautionLib", c);
+
+            // Montant total de la caution
+            double montantTotal = caution.getMontantgrp();
+
+            // Montant déjà payé (somme des mouvements de caisse "encaisser" pour cette caution)
+            String sql = "SELECT NVL(SUM(credit),0) FROM MOUVEMENTCAISSE WHERE idOrigine=? AND type_mvt=?";
+            java.sql.PreparedStatement ps = c.prepareStatement(sql);
+            ps.setString(1, idcaution);
+            ps.setString(2, ConstanteLocation.type_encaissement);
+            java.sql.ResultSet rs = ps.executeQuery();
+            double montantPaye = 0;
+            if (rs.next()) montantPaye = rs.getDouble(1);
+            rs.close();
+            ps.close();
+
+            double montantReste = montantTotal - montantPaye;
+
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("montantTotal", montantTotal);
+            resp.put("montantPaye", montantPaye);
+            resp.put("montantReste", montantReste);
+            return Response.ok(resp).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.serverError().entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+        } finally {
+            if (c != null) try { c.close(); } catch (Exception ignore) {}
+        }
+    }
+
     @GET
     @Path("/liste")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getListeCaisses() {
-        java.sql.Connection c = null;
+        Connection c = null;
         try {
-            c = new utilitaire.UtilDB().GetConn();
+            c = new UtilDB().GetConn();
             caisse.Caisse caisse = new caisse.Caisse();
             caisse.Caisse[] caisses = (caisse.Caisse[]) bean.CGenUtil.rechercher(caisse, null, null, c, "");
             java.util.List<java.util.Map<String, String>> result = new java.util.ArrayList<>();
@@ -143,11 +261,8 @@ public Response insererMvtCaisseCaution(
         try {
             c = new UtilDB().GetConn();
 
-            // Récupérer la caution
-            CautionLib cau = new CautionLib();
-            cau.setId(idcaution);
-            cau.setIdreservation(idreservation);
-            cau = (CautionLib) new CautionLib().getById(idcaution, "CAUTIONLIB", c);
+            // Récupérer la caution (même logique que mvtcaisse-saisie-caution.jsp)
+            CautionLib cau = (CautionLib) new CautionLib().getById(idcaution, "CautionLib", c);
 
             // Récupérer la réservation liée
             ReservationLib res = cau.getReservationAvecVerif(c);
@@ -156,17 +271,32 @@ public Response insererMvtCaisseCaution(
             double credit = montantRetenue;
             double debit = cau.getMontantgrp() - montantRetenue;
 
+            // Montant à payer pour encaissement (même logique que mvtcaisse-saisie-caution.jsp)
+            double payer = 0;
+            if ("encaisser".equalsIgnoreCase(type)) {
+                Caution caution = (Caution) new Caution().getById(idcaution, "CAUTION", c);
+                // payer = (caution.getMontantreservation() * caution.getPct_applique()) / 100;
+                payer = cau.getMontantgrp(); // Montant de la caution déjà calculé et stocké
+            }
+
             Map<String, Object> form = new HashMap<>();
             form.put("daty", utilitaire.Utilitaire.dateDuJour());
             form.put("designation", "Paiement du " + utilitaire.Utilitaire.dateDuJour());
             form.put("tiers", res.getIdclient());
-            form.put("idCaisse", null); // à remplir côté front avec la liste des caisses
-            form.put("debit", type != null && type.equalsIgnoreCase("encaisser") ? 0 : debit);
-            form.put("credit", type != null && type.equalsIgnoreCase("encaisser") ? debit : credit);
+            form.put("idCaisse", null);
+
+            if ("encaisser".equalsIgnoreCase(type)) {
+                form.put("debit", 0);
+                form.put("credit", payer);
+            } else {
+                form.put("debit", debit);
+                form.put("credit", credit);
+            }
+
             form.put("type", type);
             form.put("idcaution", idcaution);
             form.put("idreservation", idreservation);
-            form.put("showDebit", !(type != null && type.equalsIgnoreCase("encaisser")));
+            form.put("showDebit", !"encaisser".equalsIgnoreCase(type));
             form.put("showCredit", true);
 
             return Response.ok(form).build();

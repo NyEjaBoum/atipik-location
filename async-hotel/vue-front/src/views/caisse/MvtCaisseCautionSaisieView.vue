@@ -1,6 +1,26 @@
 <template>
   <div class="content-wrapper">
     <h1>Saisie de mouvement de caisse</h1>
+
+    <!-- Affichage des statistiques de la caution -->
+    <div class="row" v-if="cautionStats.montantTotal > 0">
+      <div class="col-md-4">
+        <div class="alert alert-info">
+          <b>Montant total caution :</b> {{ cautionStats.montantTotal.toLocaleString() }} Ar
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="alert alert-success">
+          <b>Déjà payé :</b> {{ cautionStats.montantPaye.toLocaleString() }} Ar
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="alert alert-warning">
+          <b>Reste à payer :</b> {{ cautionStats.montantReste.toLocaleString() }} Ar
+        </div>
+      </div>
+    </div>
+
     <form @submit.prevent="submitForm">
       <div class="row">
         <div class="col-md-6">
@@ -74,23 +94,41 @@ const form = ref({
   daty: todayISO(),
   designation: '',
   idCaisse: '',
-  tiers: '', // affichage uniquement
+  tiers: '',
   debit: 0,
   credit: 0,
   idcaution: '',
   idreservation: '',
-  type: 'encaisser' // valeur par défaut
+  type: 'encaisser'
 })
+
 const caisses = ref([])
+const cautionStats = ref({
+  montantTotal: 0,
+  montantPaye: 0,
+  montantReste: 0
+})
+
+async function loadCautionStats() {
+  if (!form.value.idcaution) return
+  try {
+    const resp = await fetch(`/asynclocation/api/caisse/caution-stats?idcaution=${form.value.idcaution}`)
+    const data = await resp.json()
+    cautionStats.value = data
+  } catch (e) {
+    console.error('Erreur chargement stats caution:', e)
+  }
+}
 
 async function reloadForm() {
-  // Recharge les infos du formulaire selon le type choisi
   const resp = await fetch(`/asynclocation/api/caisse/formulaire-mvt-caution?idcaution=${form.value.idcaution}&idreservation=${form.value.idreservation}&type=${form.value.type}`)
   const data = await resp.json()
   Object.assign(form.value, data)
   if (!form.value.daty) {
     form.value.daty = todayISO()
   }
+  // Recharger les stats après avoir rechargé le formulaire
+  await loadCautionStats()
 }
 
 onMounted(async () => {
@@ -99,8 +137,8 @@ onMounted(async () => {
   form.value.type = route.query.type || 'encaisser'
 
   await reloadForm()
+  await loadCautionStats()
 
-  // Charger la liste des caisses
   const respCaisses = await fetch('/asynclocation/api/caisse/liste')
   caisses.value = await respCaisses.json()
 })
@@ -148,5 +186,25 @@ async function submitForm() {
 }
 .row {
   margin-bottom: 1rem;
+}
+.alert {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 0;
+}
+.alert-info {
+  background-color: #d9edf7;
+  border: 1px solid #bce8f1;
+  color: #31708f;
+}
+.alert-success {
+  background-color: #dff0d8;
+  border: 1px solid #d6e9c6;
+  color: #3c763d;
+}
+.alert-warning {
+  background-color: #fcf8e3;
+  border: 1px solid #faebcc;
+  color: #8a6d3b;
 }
 </style>

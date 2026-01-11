@@ -1,0 +1,518 @@
+
+Connected to: Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+Export file created by EXPORT:V11.02.00 via conventional path
+import done in WE8MSWIN1252 character set and AL16UTF16 NCHAR character set
+export client uses US7ASCII character set (possible charset conversion)
+. importing ATIPIK's objects into ATIPIK
+. . importing table                         "ACTE"         63 rows imported
+. . importing table                       "AGENCE"          4 rows imported
+. . importing table        "ANNULATIONUTILISATEUR"          4 rows imported
+. . importing table                 "ANOMALIEORDO"       6833 rows imported
+. . importing table                  "ARTICLEPRIX"       3104 rows imported
+. . importing table               "ARTICLES_STOCK"        188 rows imported
+. . importing table             "AS_BONDECOMMANDE"          0 rows imported
+. . importing table       "AS_BONDECOMMANDE_FILLE"          0 rows imported
+. . importing table            "AS_BONDELIVRAISON"          0 rows imported
+. . importing table     "AS_BONDELIVRAISON_CLIENT"          0 rows imported
+. . importing table "AS_BONDELIVRAISON_CLIENT_FILLE"          0 rows imported
+. . importing table      "AS_BONDELIVRAISON_FILLE"          0 rows imported
+. . importing table               "AS_INGREDIENTS"        215 rows imported
+. . importing table        "AS_INGREDIENTS_BACKUP"        188 rows imported
+. . importing table           "AS_INGREDIENT_FITA"        192 rows imported
+. . importing table       "AS_INGREDIENT_OLD_FITA"        192 rows imported
+. . importing table                   "AS_RECETTE"          0 rows imported
+. . importing table              "AS_RECETTE_BACK"         12 rows imported
+. . importing table                     "AS_UNITE"         20 rows imported
+. . importing table             "ATTACHER_FICHIER"         57 rows imported
+. . importing table                      "AVOIRFC"          0 rows imported
+. . importing table                 "AVOIRFCFILLE"          0 rows imported
+. . importing table                 "BILANSECTION"          2 rows imported
+. . importing table         "BILAN_SECTION_COMPTE"          1 rows imported
+. . importing table                  "BONCOMMANDE"          1 rows imported
+. . importing table         "BONDECOMMANDE_CLIENT"          0 rows imported
+. . importing table   "BONDECOMMANDE_CLIENT_FILLE"          0 rows imported
+. . importing table                           "BU"          3 rows imported
+. . importing table                       "CAISSE"          6 rows imported
+. . importing table                    "CATEGORIE"          3 rows imported
+. . importing table             "CATEGORIEAVOIRFC"          0 rows imported
+. . importing table              "CATEGORIECAISSE"          8 rows imported
+. . importing table          "CATEGORIEINGREDIENT"         23 rows imported
+. . importing table             "CATEGORIEVOITURE"          3 rows imported
+. . importing table             "CATEGORIE_CENTRE"          0 rows imported
+. . importing table                 "CAUSECAUTION"          3 rows imported
+. . importing table                      "CAUTION"         16 rows imported
+. . importing table               "CAUTIONDETAILS"        430 rows imported
+. . importing table                  "CAUTION_MVT"          0 rows imported
+. . importing table          "CAUTION_MVT_DETAILS"          0 rows imported
+. . importing table                       "CENTRE"          0 rows imported
+. . importing table                "CHARGEVOITURE"          0 rows imported
+. . importing table                      "CHECKIN"         79 rows imported
+. . importing table                     "CHECKOUT"         63 rows imported
+. . importing table                       "CHEQUE"          0 rows imported
+. . importing table                "CLASSEETFICHE"          3 rows imported
+. . importing table                 "CLEREFERENCE"         40 rows imported
+. . importing table                       "CLIENT"        128 rows imported
+. . importing table           "CLOTURE_MOIS_ANNEE"         13 rows imported
+. . importing table                   "CNAPS_USER"          7 rows imported
+. . importing table         "COMPTA_CLASSE_COMPTE"          8 rows imported
+. . importing table                "COMPTA_COMPTE"        346 rows imported
+. . importing table              "COMPTA_ECRITURE"        651 rows imported
+. . importing table              "COMPTA_EXERCICE"          4 rows imported
+. . importing table               "COMPTA_JOURNAL"         13 rows imported
+. . importing table              "COMPTA_LETTRAGE"          1 rows imported
+. . importing table               "COMPTA_ORIGINE"         15 rows imported
+. . importing table         "COMPTA_SOUS_ECRITURE"       1287 rows imported
+. . importing table           "COMPTA_TYPE_COMPTE"          4 rows imported
+. . importing table              "CONDITIONNEMENT"        271 rows imported
+. . importing table                "CONFIGURATION"          2 rows imported
+. . importing table                   "DATYEXISTE"        730 rows imported
+. . importing table                      "DEPENSE"          0 rows imported
+. . importing table             "DETAILSBONCAISSE"          0 rows imported
+. . importing table                       "DEVISE"          3 rows imported
+. . importing table                    "DIRECTION"          1 rows imported
+. . importing table                     "DMDACHAT"          0 rows imported
+. . importing table                "DMDACHATFILLE"          0 rows imported
+. . importing table                      "DMDPRIX"          0 rows imported
+. . importing table                 "DMDPRIXFILLE"          0 rows imported
+. . importing table                 "ENCAISSEMENT"          0 rows imported
+. . importing table         "ENCAISSEMENT_DETAILS"          0 rows imported
+. . importing table                   "EQUIPERESP"          4 rows imported
+. . importing table                  "EQUIVALENCE"          0 rows imported
+. . importing table                    "ETATSTOCK"          0 rows imported
+. . importing table                  "FABRICATION"         30 rows imported
+. . importing table             "FABRICATIONFILLE"         35 rows imported
+. . importing table                "FACTURECLIENT"          1 rows imported
+. . importing table         "FACTURECLIENTDETAILS"          1 rows imported
+. . importing table           "FACTUREFOURNISSEUR"          0 rows imported
+. . importing table      "FACTUREFOURNISSEURFILLE"          0 rows imported
+. . importing table                  "FOURNISSEUR"         13 rows imported
+. . importing table                  "HISTOINSERT"        786 rows imported
+. . importing table                   "HISTORIQUE"      37601 rows imported
+. . importing table              "HISTORIQUEPUING"         14 rows imported
+. . importing table              "HISTORIQUEPVING"         29 rows imported
+. . importing table       "HISTORIQUE_DEMANDEPRIX"          8 rows imported
+. . importing table           "HISTORIQUE_PRODUIT"         17 rows imported
+. . importing table              "INDISPONIBILITE"          2 rows imported
+. . importing table                   "INVENTAIRE"         33 rows imported
+. . importing table              "INVENTAIREFILLE"        786 rows imported
+. . importing table                        "JAUGE"          0 rows imported
+. . importing table                  "LIAISONBCBL"          0 rows imported
+. . importing table                  "LIAISONBCFC"          0 rows imported
+. . importing table   "LIAISONFACTUREFOURNISSEURS"          0 rows imported
+. . importing table                    "LIVRAISON"          0 rows imported
+. . importing table                "LOG_DIRECTION"          9 rows imported
+. . importing table                "LOG_PERSONNEL"       2580 rows imported
+. . importing table                  "LOG_SERVICE"        160 rows imported
+. . importing table                     "MAGASIN2"          4 rows imported
+. . importing table                "MENUDYNAMIQUE"        284 rows imported
+. . importing table        "MENUDYNAMIQUE29082025"        263 rows imported
+. . importing table                      "MESSAGE"         34 rows imported
+. . importing table                 "MODEPAIEMENT"          3 rows imported
+. . importing table                 "MOTIFAVOIRFC"          0 rows imported
+. . importing table              "MOUVEMENTCAISSE"         35 rows imported
+. . importing table           "MVTCAISSEPREVISION"          0 rows imported
+. . importing table                     "MVTSTOCK"        371 rows imported
+. . importing table                "MVTSTOCKFILLE"        355 rows imported
+. . importing table            "MVTSTOCKFILLEBACK"        137 rows imported
+. . importing table                     "MY_TABLE"       1844 rows imported
+. . importing table                 "NOTIFICATION"        491 rows imported
+. . importing table                "NOTIFICATION2"        374 rows imported
+. . importing table                         "OFAB"         12 rows imported
+. . importing table                      "OFFILLE"         13 rows imported
+. . importing table             "ORDONNERPAIEMENT"          0 rows imported
+. . importing table       "ORDONNERPAIEMENTDETAIL"          0 rows imported
+. . importing table                  "PAIEMENTBON"          0 rows imported
+. . importing table                   "PAIEMENTFF"          0 rows imported
+. . importing table                   "PARAMCRYPT"          7 rows imported
+. . importing table                    "PERSONNEL"          2 rows imported
+. . importing table            "PERTEGAINIMPREVUE"          7 rows imported
+. . importing table                        "POINT"          6 rows imported
+. . importing table                        "POMPE"          0 rows imported
+. . importing table "PRECISION_DETAIL_ENCAISSEMENT"          0 rows imported
+. . importing table                  "PRELEVEMENT"          0 rows imported
+. . importing table         "PRELEVEMENT_ENCAISSE"          0 rows imported
+. . importing table                    "PREVISION"        110 rows imported
+. . importing table                      "PROCESS"         17 rows imported
+. . importing table                      "PRODUIT"         10 rows imported
+. . importing table                     "PROFORMA"         29 rows imported
+. . importing table                "PROFORMAACHAT"          0 rows imported
+. . importing table          "PROFORMAACHATDETAIL"          0 rows imported
+. . importing table              "PROFORMARELANCE"          0 rows imported
+. . importing table             "PROFORMA_DETAILS"        147 rows imported
+. . importing table             "RAP_OPERATIONNEL"       1601 rows imported
+. . importing table             "REFERENCEFACTURE"          0 rows imported
+. . importing table                 "REPORTCAISSE"          7 rows imported
+. . importing table            "REQUETE_A_ENVOYER"       7587 rows imported
+. . importing table     "REQUETE_A_ENVOYER_GROUPE"          5 rows imported
+. . importing table              "REQUETE_EXECUTE"         68 rows imported
+. . importing table                  "RESERVATION"         17 rows imported
+. . importing table           "RESERVATIONDETAILS"         94 rows imported
+. . importing table          "RESERVATIONPLANNING"         63 rows imported
+. . importing table     "RESERVATION_VERIFICATION"          0 rows imported
+. . importing table    "RESERVATION_VERIF_DETAILS"          0 rows imported
+. . importing table                        "ROLES"          6 rows imported
+. . importing table             "SERVER_BROADCAST"          1 rows imported
+. . importing table                        "SEUIL"          0 rows imported
+. . importing table                       "SOURCE"          0 rows imported
+. . importing table                "SOUSCATEGORIE"        125 rows imported
+. . importing table                 "TAUXDECHANGE"         19 rows imported
+. . importing table               "TRANSFERTSTOCK"         13 rows imported
+. . importing table        "TRANSFERTSTOCKDETAILS"          4 rows imported
+. . importing table                   "TYPECAISSE"          4 rows imported
+. . importing table      "TYPECATEGORIEINGREDIENT"          3 rows imported
+. . importing table                   "TYPECLIENT"          2 rows imported
+. . importing table                "TYPEGAINPERTE"          5 rows imported
+. . importing table                "TYPELIVRAISON"          2 rows imported
+. . importing table                  "TYPEMAGASIN"          4 rows imported
+. . importing table                 "TYPEMVTSTOCK"          3 rows imported
+. . importing table                  "TYPE_CENTRE"          0 rows imported
+. . importing table            "TYPE_ENCAISSEMENT"          2 rows imported
+. . importing table                 "TYPE_FACTURE"          0 rows imported
+. . importing table             "TYPE_MVT_CAUTION"          4 rows imported
+. . importing table                 "TYPE_PRODUIT"          6 rows imported
+. . importing table                        "UNITE"          6 rows imported
+. . importing table                 "USERHOMEPAGE"          0 rows imported
+. . importing table                     "USERMENU"        101 rows imported
+. . importing table                  "UTILISATEUR"          9 rows imported
+. . importing table                        "VENTE"         17 rows imported
+. . importing table              "VENTELUBRIFIANT"          0 rows imported
+. . importing table              "VENTE_AMBOASARY"         48 rows imported
+. . importing table                "VENTE_DETAILS"         94 rows imported
+. . importing table          "VENTE_DETAILSTALOHA"         67 rows imported
+. . importing table      "VENTE_DETAILS_AMBOASARY"         62 rows imported
+. . importing table              "VERSEMENTCHEQUE"          0 rows imported
+. . importing table       "VERSEMENTCHEQUEDETAILS"          0 rows imported
+. . importing table          "VIREMENTINTRACAISSE"          0 rows imported
+. . importing table                   "VISAOBJECT"          0 rows imported
+. . importing table                      "VOITURE"         39 rows imported
+. . importing table       "V_ETATCAISSE_DEVISE_AR"          7 rows imported
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."ENCAISSEMENT_DETAILS_LIB"                      "
+ "    ("ID","IDENCAISSEMENT","IDCATEGORIECAISSE","IDCATEGORIECAISSELIB","MONT"
+ "ANT","REMARQUE") AS "
+ "SELECT "
+ "ed.ID ,"
+ "ed.IDENCAISSEMENT ,"
+ "ed.IDCATEGORIECAISSE ,"
+ "c.VAL AS IDCATEGORIECAISSELIB,"
+ "ed.MONTANT ,"
+ "ed.REMARQUE "
+ "FROM ENCAISSEMENT_DETAILS ed "
+ "LEFT JOIN CATEGORIECAISSE c ON c.ID = ed.IDCATEGORIECAISSE  "
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."UNITES_TRAIT"                          ("ID","V"
+ "AL","DESCE") AS "
+ "select ''  as id,"
+ "       '-' as val,"
+ "       '-' as desce"
+ "from DUAL"
+ "union"
+ "select su."ID", su."VAL", su."DESCE""
+ "from ST_UNITE su"
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."ENCAISSEMENT_BON"                          ("ID"
+ "ENCAISSEMENT","MONTANTCATEGORIE") AS "
+ "SELECT "
+ "ed.IDENCAISSEMENT ,"
+ "sum( nvl(ed.MONTANT,0) ) AS montantcategorie"
+ "FROM ENCAISSEMENT_DETAILS ed"
+ "WHERE ed.IDCATEGORIECAISSE = 'CTC001' "
+ "GROUP BY ed.IDENCAISSEMENT "
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."ENCAISSEMENT_CHEQUE"                          ("
+ ""IDENCAISSEMENT","MONTANTCATEGORIE") AS "
+ "SELECT "
+ "ed.IDENCAISSEMENT ,"
+ "sum( nvl(ed.MONTANT,0) ) AS montantcategorie"
+ "FROM ENCAISSEMENT_DETAILS ed"
+ "WHERE ed.IDCATEGORIECAISSE = 'CTC002' "
+ "GROUP BY ed.IDENCAISSEMENT "
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."ENCAISSEMENT_MVOLA"                          (""
+ "IDENCAISSEMENT","MONTANTCATEGORIE") AS "
+ "SELECT "
+ "ed.IDENCAISSEMENT ,"
+ "sum( nvl(ed.MONTANT,0) ) AS montantcategorie"
+ "FROM ENCAISSEMENT_DETAILS ed"
+ "WHERE ed.IDCATEGORIECAISSE = 'CTC003' "
+ "GROUP BY ed.IDENCAISSEMENT "
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."ENCAISSEMENT_ESPECES"                          "
+ "("IDENCAISSEMENT","MONTANTCATEGORIE") AS "
+ "SELECT "
+ "ed.IDENCAISSEMENT ,"
+ "sum( nvl(ed.MONTANT,0) ) AS montantcategorie"
+ "FROM ENCAISSEMENT_DETAILS ed"
+ "WHERE ed.IDCATEGORIECAISSE = 'CTC003' "
+ "GROUP BY ed.IDENCAISSEMENT "
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."ENCAISSEMENT_ORANGEMONEY"                      "
+ "    ("IDENCAISSEMENT","MONTANTCATEGORIE") AS "
+ "SELECT "
+ "ed.IDENCAISSEMENT ,"
+ "sum( nvl(ed.MONTANT,0) ) AS montantcategorie"
+ "FROM ENCAISSEMENT_DETAILS ed"
+ "WHERE ed.IDCATEGORIECAISSE = 'CTC005' "
+ "GROUP BY ed.IDENCAISSEMENT "
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."ENCAISSEMENT_FANILO"                          ("
+ ""IDENCAISSEMENT","MONTANTCATEGORIE") AS "
+ "SELECT "
+ "ed.IDENCAISSEMENT ,"
+ "sum( nvl(ed.MONTANT,0) ) AS montantcategorie"
+ "FROM ENCAISSEMENT_DETAILS ed"
+ "WHERE ed.IDCATEGORIECAISSE = 'CTC006' "
+ "GROUP BY ed.IDENCAISSEMENT "
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."ENCAISSEMENT_TPE"                          ("ID"
+ "ENCAISSEMENT","MONTANTCATEGORIE") AS "
+ "SELECT "
+ "ed.IDENCAISSEMENT ,"
+ "sum( nvl(ed.MONTANT,0) ) AS montantcategorie"
+ "FROM ENCAISSEMENT_DETAILS ed"
+ "WHERE ed.IDCATEGORIECAISSE = 'CTC007' "
+ "GROUP BY ed.IDENCAISSEMENT "
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."ENCAISSEMENT_VISA"                          ("I"
+ "DENCAISSEMENT","MONTANTCATEGORIE") AS "
+ "SELECT "
+ "ed.IDENCAISSEMENT ,"
+ "sum( nvl(ed.MONTANT,0) ) AS montantcategorie"
+ "FROM ENCAISSEMENT_DETAILS ed"
+ "WHERE ed.IDCATEGORIECAISSE = 'CTC008' "
+ "GROUP BY ed.IDENCAISSEMENT "
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."ENCAISSEMENT_LIB"                          ("ID"
+ "","DESIGNATION","IDCAISSE","IDCAISSELIB","ETAT","ETATLIB","DATY","IDPOMPIST"
+ "E","IDPOMPISTELIB","IDPOINT","IDPOINTLIB","IDCATEGORIECAISSE","VENTECARBURA"
+ "NT","VENTELUBRIFIANT","DEPENSE","TOTALRECETTE","TOTALENCAISSEMENT","TOTALVE"
+ "RSEMENT","ECART","TOTALESPECE","TOTALORANGEMONEY") AS "
+ "SELECT "
+ "e.ID ,"
+ "e.DESIGNATION ,"
+ "e.IDCAISSE ,"
+ "c.VAL AS IDCAISSELIB,"
+ "e.ETAT ,"
+ "CASE "
+ "	WHEN e.ETAT = 1 "
+ "	THEN 'CREE'"
+ "	WHEN e.ETAT = 11 "
+ "	THEN 'VALIDEE'"
+ "	WHEN e.ETAT = 0 "
+ "	THEN 'ANNULEE'"
+ "END AS ETATLIB, "
+ "e.DATY ,"
+ "c.IDPOMPISTE ,"
+ "p.NOMUSER AS IDPOMPISTELIB,"
+ "c.IDPOINT ,"
+ "p2.VAL AS IDPOINTLIB ,"
+ "c.IDCATEGORIECAISSE ,"
+ "nvl(ev.ventecarburant,0) AS ventecarburant ,"
+ "nvl(vv.ventelubrifiant,0) AS ventelubrifiant ,"
+ "nvl(dv.depense,0) AS depense ,"
+ "nvl(ev.ventecarburant,0) + nvl(vv.ventelubrifiant,0) AS totalrecette ,"
+ "nvl(ev2.totalencaissement,0) AS totalencaissement ,"
+ "nvl(ev2.totalencaissement,0) - nvl(dv.depense,0) AS totalversement ,"
+ "nvl(ev2.totalencaissement,0) - ( nvl(ev.ventecarburant,0) + nvl(vv.ventelub"
+ "rifiant,0) ) AS ecart ,"
+ "nvl(ee.montantcategorie , 0) AS totalEspece,"
+ "nvl(eo.montantcategorie , 0) AS totalOrangeMoney"
+ "FROM ENCAISSEMENT e "
+ "LEFT JOIN CAISSE c ON c.ID = e.IDCAISSE "
+ "LEFT JOIN POMPISTELIB p ON p.REFUSER = c.IDPOMPISTE "
+ "LEFT JOIN encaissementvente ev ON ev.IDENCAISSEMENT = e.ID "
+ "LEFT JOIN ventelubrifiant_validee vv ON vv.IDENCAISSEMENT = e.ID"
+ "LEFT JOIN depense_validee dv ON dv.IDORIGINE = e.ID"
+ "LEFT JOIN encaissement_validee ev2 ON ev2.IDENCAISSEMENT = e.ID"
+ "LEFT JOIN POINT p2 ON p2.ID = c.IDPOINT "
+ "LEFT JOIN ENCAISSEMENT_ESPECES ee ON ee.IDENCAISSEMENT = e.ID"
+ "LEFT JOIN ENCAISSEMENT_ORANGEMONEY eo ON eo.IDENCAISSEMENT = e.ID"
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."ENCAISSEMENT_PRECISION_TOTAL"                  "
+ "        ("ID","IDENCAISSEMENT","IDCATEGORIECAISSE","MONTANT","REMARQUE","MO"
+ "NTANTTOTALPRECISION") AS "
+ "SELECT "
+ "ed.ID ,"
+ "ed.IDENCAISSEMENT ,"
+ "ed.IDCATEGORIECAISSE ,"
+ "ed.MONTANT ,"
+ "ed.REMARQUE ,"
+ "nvl(pde.montantTotalPrecision,0) AS montantTotalPrecision"
+ "FROM ENCAISSEMENT_DETAILS ed "
+ "LEFT JOIN MONTANTPRECISIONENCAISSEMENT pde ON pde.IDENCAISSEMENT = ed.IDENC"
+ "AISSEMENT AND pde.IDCATEGORIECAISSE = ed.IDCATEGORIECAISSE "
+ "WHERE ed.IDCATEGORIECAISSE != 'CTC004'"
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."RESULTATPREVGROUPSEMAINE"                      "
+ "    ("DATY","DEBIT","CREDIT","semaine","annee","mois") AS "
+ "SELECT min(r.daty) AS daty,sum(r.debit) AS debit,sum(r.CREDIT) AS credit,r."
+ ""semaine",r."annee", r."mois" "
+ "FROM RESULTATPREVISIONNELTOUS r GROUP BY r."semaine",r."annee", r."mois""
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."RESULTATPREVGROUPMOIS"                         "
+ " ("DATY","DEBIT","CREDIT","annee","mois") AS "
+ "SELECT min(r.daty) AS daty,sum(r.debit) AS debit,sum(r.CREDIT) AS credit,r."
+ ""annee", r."mois" "
+ "FROM RESULTATPREVISIONNELTOUS r GROUP BY r."annee", r."mois""
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."VOITURELIBELLEMONTANT_1"                       "
+ "   ("ID","NOM","COULEUR","NUMERO","GPS","CHARGE_PER_KILOMETRE","VALEUR_ACTU"
+ "ELLE","KILOMETRAGE_ACTUEL","CONSOMMATION","ENERGIE","NBPLACE","CATEGORIE",""
+ "ETATGENERALE","ESTENPANNE","CATEGORIELIBELLE","MONTANTRESA","CHARGE","MARGE"
+ "","PRIORITE") AS "
+ "SELECT "ID","NOM","COULEUR","NUMERO","GPS","CHARGE_PER_KILOMETRE","VALEUR_A"
+ "CTUELLE","KILOMETRAGE_ACTUEL","CONSOMMATION","ENERGIE","NBPLACE","CATEGORIE"
+ "","ETATGENERALE","ESTENPANNE","CATEGORIELIBELLE","MONTANTRESA","CHARGE","MA"
+ "RGE","PRIORITE" FROM ("
+ "	SELECT * FROM VOITURELIBELLEMONTANT1 WHERE priorite >0"
+ "UNION ALL "
+ "  select v."ID",v."NOM",v."COULEUR",v."NUMERO",v."GPS",v."CHARGE_PER_KILOME"
+ "TRE",v."VALEUR_ACTUELLE",v."KILOMETRAGE_ACTUEL",v."CONSOMMATION","
+ "  v."ENERGIE",v."NBPLACE",v."CATEGORIE",v."ETATGENERALE",v."ESTENPANNE",v.""
+ "CATEGORIELIBELLE", cast(nvl(r.montant,0)as number(30,2)) as montantResa,"
+ "  cast(nvl(ff.montant,0) as number(30,2)) as charge, cast(nvl(r.montant,0)-"
+ "nvl(ff.montant,0)as number(30,2)) as marge, v.PRIORITE  AS PRIORITE  from V"
+ "OITURELIBELLE v"
+ "left join reservationDetGroupeVoiture r on v.ID=r.IDVOITURE"
+ "left join factureFournGroupeVoiture ff on v.ID=ff.IDVOITURE WHERE v.PRIORIT"
+ "E = 0)"
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."EQUIVALENCE_QTE"                          ("ID""
+ ","IDPRODUIT","IDUNITE","QTE","IDPRODUITLIB","IDUNITELIB") AS "
+ "select "ID","
+ "       "IDPRODUIT","
+ "       "IDUNITE","
+ "       "QTE","
+ "       "IDPRODUITLIB","
+ "       "IDUNITELIB""
+ "from EQUIVALENCE_LIBCOMPLET"
+ "where QTE = 1"
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."ENCAISSEMENT_RESUME"                          ("
+ ""ID","IDPOINT","IDPOINTLIB","DATY","VENTECARBURANT","VENTELUBRIFIANT","BON""
+ ","CHEQUE","MVOLA","ESPECES","ORANGEMONEY","FANILO","TPE","VISA","DEPENSE",""
+ "TOTALRECETTE","TOTALENCAISSEMENT","TOTALVERSEMENT") AS "
+ "SELECT "
+ "el.ID ,"
+ "el.IDPOINT,"
+ "el.IDPOINTLIB ,"
+ "el.DATY,"
+ "el.ventecarburant,"
+ "el.ventelubrifiant,"
+ "nvl(eb.montantcategorie,0) AS bon ,"
+ "nvl(ec.montantcategorie,0) AS cheque ,"
+ "nvl(em.montantcategorie,0) AS mvola ,"
+ "nvl(ee.montantcategorie,0) AS especes ,"
+ "nvl(eo.montantcategorie,0) AS orangemoney ,"
+ "nvl(ef.montantcategorie,0) AS fanilo,"
+ "nvl(et.montantcategorie,0) AS tpe ,"
+ "nvl(ev.montantcategorie,0) AS visa ,"
+ "el.depense ,"
+ "el.totalrecette ,"
+ "el.totalencaissement ,"
+ "el.totalversement "
+ "FROM ENCAISSEMENT_LIB el "
+ "LEFT JOIN CATEGORIECAISSE c ON c.ID = el.IDCATEGORIECAISSE "
+ "LEFT JOIN encaissement_bon eb ON eb.IDENCAISSEMENT = el.ID "
+ "LEFT JOIN encaissement_cheque ec ON ec.IDENCAISSEMENT = el.ID"
+ "LEFT JOIN encaissement_mvola em ON em.IDENCAISSEMENT = el.ID"
+ "LEFT JOIN encaissement_especes ee ON ee.IDENCAISSEMENT = el.ID "
+ "LEFT JOIN encaissement_orangemoney eo ON eo.IDENCAISSEMENT = el.ID"
+ "LEFT JOIN encaissement_fanilo ef ON ef.IDENCAISSEMENT = el.ID"
+ "LEFT JOIN encaissement_tpe et ON et.IDENCAISSEMENT = el.ID"
+ "LEFT JOIN encaissement_visa ev ON ev.IDENCAISSEMENT = el.ID"
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."VENTE_CARBU_CLIENT"                          (""
+ "IDPRELEVEMENT","IDENCAISSEMENT","IDPOMPISTE","NOMUSER","IDPOMPE","NOMMAGASI"
+ "N","VENTECARBURANT","DATY") AS "
+ "("
+ "SELECT "
+ "pe.IDPRELEVEMENT,"
+ "pe.IDENCAISSEMENT,"
+ "p.IDPOMPISTE,"
+ "p.NOMUSER,"
+ "p.IDPOMPE,"
+ "p.NOMMAGASIN,"
+ "el.VENTECARBURANT,"
+ "el.DATY"
+ "FROM PRELEVEMENT_ENCAISSE pe"
+ "JOIN PRELEVEMENTLIB p ON p.id=pe.IDPRELEVEMENT"
+ "JOIN ENCAISSEMENT_LIB el ON el.ID =pe.IDENCAISSEMENT)"
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."VENTEDEP_GRAPH"                          ("IDPR"
+ "ELEVEMENT","IDENCAISSEMENT","IDPOMPISTE","NOMUSER","IDPOMPE","NOMMAGASIN",""
+ "VENTECARBURANT","ENTREE","DATY") AS "
+ "("
+ "SELECT"
+ "pe.IDPRELEVEMENT,"
+ "pe.IDENCAISSEMENT,"
+ "p.IDPOMPISTE,"
+ "p.NOMUSER,"
+ "p.IDPOMPE,"
+ "p.NOMMAGASIN,"
+ "el.VENTECARBURANT,"
+ "el.VENTECARBURANT - el.DEPENSE AS entree,"
+ "el.DATY"
+ "FROM PRELEVEMENT_ENCAISSE pe"
+ "JOIN PRELEVEMENTLIB p ON p.id=pe.IDPRELEVEMENT"
+ "JOIN ENCAISSEMENT_LIB el ON el.ID =pe.IDENCAISSEMENT"
+ ")"
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."ST_ARTICLELIB_PU"                          ("ID"
+ "","CODE","DESIGNATION","SEUIL","UNITE","PRESENTATION","TYPE","GROUPEE","SOU"
+ "SGROUPE","CLASSEE","CODEMNEMONIQUE","PUGROS","PUDONATION") AS "
+ "select ar.id,"
+ "       ar.code,"
+ "       ar.designation,"
+ "       ar.seuil,"
+ "       uni.val as unite,"
+ "       ar.presentation,"
+ "       ta.VAL        as type,"
+ "       ga.VAL        as groupee,"
+ "       sga.VAL       as sousgroupe,"
+ "       ar.classee,"
+ "       ar.codemnemonique,"
+ "       ar.PUGROS,"
+ "       ar.PUDONATION"
+ "from ST_ARTICLE ar"
+ "         left join ST_TYPE_ARTICLE ta on ta.id = ar.TYPE"
+ "         left join ST_GROUPE_ARTICLE ga on ga.id = ar.GROUPEE"
+ "         left join ST_SOUSGROUPE_ARTICLE sga on sga.id = ar.SOUSGROUPE"
+ "         left join st_unite uni on ar.UNITE = uni.ID"
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."ST_ARTICLE_EQUIVALENCE"                        "
+ "  ("ID","CODE","DESIGNATION","SEUIL","UNITE","PRESENTATION","TYPE","GROUPEE"
+ "","SOUSGROUPE","CLASSEE","CODEMNEMONIQUE","PUGROS","PUDONATION","UNITEEQUIV"
+ "ALENCE","QTEEQUIVALENCE") AS "
+ "SELECT sa."ID","
+ "       sa."CODE","
+ "       sa."DESIGNATION","
+ "       sa."SEUIL","
+ "       sa."UNITE","
+ "       sa."PRESENTATION","
+ "       sa."TYPE","
+ "       sa."GROUPEE","
+ "       sa."SOUSGROUPE","
+ "       sa."CLASSEE","
+ "       sa."CODEMNEMONIQUE","
+ "       sa."PUGROS","
+ "       sa."PUDONATION","
+ "       ''                         AS uniteEquivalence,"
+ "       CAST(0.0 AS NUMBER(38, 2)) as qteEquivalence"
+ "FROM ST_ARTICLE sa"
+IMP-00041: Warning: object created with compilation warnings
+ "CREATE FORCE VIEW "ATIPIK"."EQUIVALENCE_LIBCOMPLET"                        "
+ "  ("ID","IDPRODUIT","IDUNITE","QTE","IDPRODUITLIB","IDUNITELIB") AS "
+ "SELECT eq."ID","
+ "          eq."IDPRODUIT","
+ "          eq."IDUNITE","
+ "          eq."QTE","
+ "          ar.DESIGNATION AS idproduitlib,"
+ "          un.VAL||' ('||EQ.QTE||' unite)' AS idunitelib"
+ "     FROM equivalence eq"
+ "          LEFT JOIN ST_ARTICLE ar ON ar.ID = eq.IDPRODUIT"
+ "          LEFT JOIN ST_UNITE un ON un.id = eq.IDUNITE"
+About to enable constraints...
+Import terminated successfully with warnings.

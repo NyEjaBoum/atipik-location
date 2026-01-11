@@ -6,6 +6,8 @@ import ProformaFicheView from '@/views/proforma/ProformaFicheView.vue'
 import ReservationListeView from '@/views/reservation/ReservationListeView.vue'
 import ReservationFicheView from '@/views/reservation/ReservationFicheView.vue'
 import MvtCaisseCautionSaisieView from '@/views/caisse/MvtCaisseCautionSaisieView.vue'
+import MvtCaisseLocationSaisieView from '@/views/caisse/MvtCaisseLocationSaisieView.vue'
+import VenteFicheView from '@/views/vente/VenteFicheView.vue'
 
 
 const routes = [
@@ -41,6 +43,18 @@ const routes = [
     path: '/caisse/mvt-caisse-saisie-caution',
     component: MvtCaisseCautionSaisieView,
     name: 'MvtCaisseCautionSaisieView'
+  },
+
+  {
+    path: '/caisse/mvt-caisse-saisie-location',
+    component: MvtCaisseLocationSaisieView,
+    name: 'MvtCaisseLocationSaisieView'
+  },
+
+  {
+    path: '/vente/fiche/:id',
+    component: VenteFicheView,
+    name: 'VenteFicheView'
   }
 ]
 

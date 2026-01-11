@@ -14,6 +14,7 @@ public class RestApplication extends Application {
         classes.add(ProformaWS.class);
         classes.add(ReservationWS.class);
         classes.add(CaisseWS.class);
+        classes.add(VenteWS.class);
         // Ajouter d'autres WS ici
         return classes;
     }
