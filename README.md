@@ -1,0 +1,1 @@
+# atipik-location
