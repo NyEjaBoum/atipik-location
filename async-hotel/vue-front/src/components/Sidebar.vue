@@ -12,6 +12,12 @@
           <li>
           <router-link to="/reservation/liste" class="sidebar-link" exact>Liste Réservations</router-link>
         </li>
+        <li>
+          <router-link to="/caisse/mvt-caisse-liste">
+            <i class="fa fa-list"></i>
+            <span>Liste mouvements caisse</span>
+          </router-link>
+        </li>
       </ul>
     </nav>
   </aside>

@@ -24,7 +24,48 @@ import javax.servlet.http.HttpSession;
 public class CaisseWS {
 
 
-    @POST
+@GET
+@Path("/mvt-caisse-liste")
+@Produces(MediaType.APPLICATION_JSON)
+public Response getListeMvtCaisse(
+    @QueryParam("etat") String etat
+) {
+    Connection c = null;
+    try {
+        c = new UtilDB().GetConn();
+        caisse.MvtCaisseCpl t = new caisse.MvtCaisseCpl();
+        if (etat == null) etat = "";
+        t.setNomTable(t.getNomTable().concat(etat));
+        String[] listeCrt = {"id", "designation", "daty"};
+        String[] listeInt = {"daty"};
+        String[] libEntete = {"id", "daty", "designation", "idCaisseLib", "idVenteDetail", "idVirement", "credit", "debit", "etatLib"};
+        Object[] result = bean.CGenUtil.rechercher(t, null, null, c, "");
+        java.util.List<java.util.Map<String, Object>> data = new java.util.ArrayList<>();
+        for (Object obj : result) {
+            caisse.MvtCaisseCpl mvt = (caisse.MvtCaisseCpl) obj;
+            java.util.Map<String, Object> map = new java.util.HashMap<>();
+            map.put("id", mvt.getId());
+            map.put("daty", mvt.getDaty());
+            map.put("designation", mvt.getDesignation());
+            map.put("idCaisseLib", mvt.getIdCaisseLib());
+            map.put("idVenteDetail", mvt.getIdVente());
+            map.put("idVirement", mvt.getIdVirement());
+            map.put("credit", mvt.getCredit());
+            map.put("debit", mvt.getDebit());
+            map.put("etatLib", mvt.getEtatLib());
+            data.add(map);
+        }
+        return Response.ok(data).build();
+    } catch (Exception e) {
+        e.printStackTrace();
+        return Response.serverError().entity("{\"error\":\"" + e.getMessage() + "\"}").build();
+    } finally {
+        if (c != null) try { c.close(); } catch (Exception ignore) {}
+    }
+}
+
+
+@POST
 @Path("/mvt-location")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
