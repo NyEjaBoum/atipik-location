@@ -16,11 +16,12 @@
     String idreservation = request.getParameter("idresa");
     Check[] res = null;
     if(idreservation!=null){
-      mere.setId(idreservation);
+mere.setId(idreservation);
       res = mere.getListeCheckIn("CHECKOUT_DATERETOUR",null);
     }
     int nombreLigne = res == null ? 10 : res.length;
     PageInsertMultiple pi = new PageInsertMultiple(mere, fille, request, nombreLigne, u);
+
 
     pi.setLien((String) session.getValue("lien"));
     pi.getFormu().getChamp("etat").setVisible(false);
@@ -35,21 +36,21 @@
     pi.getFormufle().getChamp("heure_0").setLibelle("Heure de la r&eacute;ception");
     pi.getFormufle().getChampMulitple("kilometrage").setVisible(false);
     pi.getFormufle().getChamp("quantite_0").setLibelle("Quantit&eacute;");
-    pi.getFormufle().getChamp("etat_materiel_0").setLibelle("&Eacute;tat du materiel");
-    pi.getFormufle().getChamp("jour_retard_0").setLibelle("Jour de retard");
-    pi.getFormufle().getChamp("etat_materiel_lib_0").setLibelle("&Eacute;tat du mat&eacute;riel");
-    pi.getFormufle().getChamp("retenue_0").setLibelle("Retenue (en %)");
-    pi.getFormufle().getChamp("responsable_0").setLibelle("Responsable");
-    pi.getFormufle().getChamp("refproduit_0").setLibelle("R&eacute;f&eacute;rence produit");
+      pi.getFormufle().getChamp("etat_materiel_0").setLibelle("&Eacute;tat du materiel");
+      pi.getFormufle().getChamp("jour_retard_0").setLibelle("Jour de retard");
+      pi.getFormufle().getChamp("etat_materiel_lib_0").setLibelle("&Eacute;tat du mat&eacute;riel");
+      pi.getFormufle().getChamp("retenue_0").setLibelle("Retenue (en %)");
+      pi.getFormufle().getChamp("responsable_0").setLibelle("Responsable");
+      pi.getFormufle().getChamp("refproduit_0").setLibelle("R&eacutef&eacute;rence produit");
 
-    pi.getFormufle().getChampMulitple("etat_materiel").setVisible(false);
-    pi.getFormufle().getChampMulitple("etat").setVisible(false);
+      pi.getFormufle().getChampMulitple("etat_materiel").setVisible(false);
+      pi.getFormufle().getChampMulitple("etat").setVisible(false);
     pi.getFormufle().getChampMulitple("remarque").setVisible(false);
 
     affichage.Liste[] liste = new Liste[1];
     Magasin cat= new Magasin();
-    liste[0] = new Liste("idmagasin", cat, "val", "id");
-    pi.getFormufle().changerEnChamp(liste);
+		liste[0] = new Liste("idmagasin", cat, "val", "id");
+		pi.getFormufle().changerEnChamp(liste);
 
     for(int i = 0; i < nombreLigne; i++){
       pi.getFormufle().getChamp("daty_"+i).setDefaut(utilitaire.Utilitaire.dateDuJour());
@@ -57,14 +58,14 @@
       pi.getFormufle().getChamp("idmagasin_"+i).setDefaut(Point.getDefaultMagasin());
       pi.getFormufle().getChamp("etat_materiel_"+i).setDefaut("0");
     }
-    if(idreservation!=null && res != null && res.length>0){
+    if(idreservation!=null&&res.length>0){
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         for (int i = 0; i < res.length; i++)
         {
             pi.getFormufle().getChamp("jour_retard_"+i).setAutre("onChange='calculerMontant("+i+")'");
             pi.getFormufle().getChamp("reservation_"+i).setDefaut(res[i].getId());
             pi.getFormufle().getChamp("idmagasin_"+i).setDefaut(ConstanteLocation.magasinAtioik);
-            pi.getFormufle().getChamp("quantite_"+i).setDefaut(String.valueOf((int)res[i].getQte()));
+            pi.getFormufle().getChamp("quantite_"+i).setDefaut(String.valueOf(res[i].getQte()));
             pi.getFormufle().getChamp("refproduit_"+i).setDefaut(res[i].getRefproduit());
             if (res[i].getDaty() != null){
                 pi.getFormufle().getChamp("daty_"+i).setDefaut(sdf.format(res[i].getDaty()));
@@ -77,10 +78,12 @@
     String[] order = {"refproduit", "reservation", "daty","heure","quantite","responsable","retenue","jour_retard","idmagasin","etat_materiel_lib"};
     pi.getFormufle().setColOrdre(order);
 
+    //Variables de navigation
     String classeMere = "reservation.Reservation";
     String classeFille = "reservation.CheckOut";
     String butApresPost = "reservation/reservation-fiche.jsp&id="+idreservation+"&tab=inc/liste-checkout";
     String colonneMere = "";
+    //Preparer les affichages
     pi.getFormu().makeHtmlInsertTabIndex();
     pi.getFormufle().makeHtmlInsertTableauIndex();
 
@@ -88,7 +91,7 @@
 <div class="content-wrapper">
   <h1>Enregistrement de la r&eacute;ception</h1>
   <div class="box-body">
-    <form class='container' id="formCheckout" action="<%=pi.getLien()%>?but=apresMultiple.jsp" method="post" >
+    <form class='container' action="<%=pi.getLien()%>?but=apresMultiple.jsp" method="post" >
       <%
         out.println(pi.getFormufle().getHtmlTableauInsert());
       %>
@@ -102,6 +105,11 @@
   </div>
 </div>
 <script>
+    // Fonction pour nettoyer les valeurs numériques (virgule -> point, enlever espaces)
+    function toRaw(value) {
+        return String(value || '').replace(/\s/g, '').replace(',', '.');
+    }
+
     const valeurs = [
     <% if (res != null) {
       for (int i = 0; i < res.length; i++) { %>
@@ -111,13 +119,13 @@
       <% }
     } %>
     ];
-    
     window.addEventListener('DOMContentLoaded', function() {
       for (let i = 0; i < valeurs.length; i++) {
         const produitInput = document.getElementById('reservation_' + i +'libelle');
         if (produitInput) produitInput.value = valeurs[i].Produit;
       }
-    });
+    }
+  );
 
     function calculerMontant(indice, source) {
         var totalTTC = 0;
@@ -130,8 +138,9 @@
                 if(parseFloat(montantHT)>100){
                     $("#retenue_"+index).val(100);
                 }else{
-                    $("#retenue_"+index).val(Math.floor(montantHT));
+                    $("#retenue_"+index).val(montantHT);
                 }
+
             }
         });
         $("#montanttotal").html(Intl.NumberFormat('fr-FR', {
@@ -140,91 +149,28 @@
         }).format(totalTTC));
     }
 
-    // Fonction globale pour convertir les décimaux en entiers
-    function convertirTousLesChamps() {
-        console.log("Conversion des champs en cours...");
-        
-        // Liste de tous les préfixes de champs numériques
-        var prefixes = ['quantite_', 'jour_retard_', 'retenue_', 'etat_materiel_'];
-        
-        prefixes.forEach(function(prefix) {
-            for (var i = 0; i < 50; i++) {
-                var input = document.getElementById(prefix + i);
-                if (input && input.value) {
-                    var val = input.value.toString().replace(',', '.').trim();
-                    var num = parseFloat(val);
-                    if (!isNaN(num)) {
-                        input.value = Math.floor(num);
-                        console.log("Converti " + prefix + i + " : " + val + " -> " + input.value);
+    function applyFormat() {
+        const form = document.querySelector('form[class="container"]');
+        if (form) {
+            form.addEventListener('submit', function() {
+                document.querySelectorAll('input[name^="jour_retard_"], input[name^="quantite_"], input[name^="retenue_"]').forEach(p => {
+                    p.value = toRaw(p.value);
+                });
+
+                document.querySelectorAll('input[name^="jour_retard_"], input[name^="quantite_"], input[name^="retenue_"], input[name^="etat_"]').forEach(field => {
+                    if(field.value && (field.value.includes('.') || field.value.includes(',')))
+                    {
+                        field.value = Math.floor(parseFloat(toRaw(field.value)));
                     }
-                }
-            }
-        });
-        
-        // Aussi par name
-        document.querySelectorAll('input').forEach(function(input) {
-            var name = input.name || '';
-            if (name.match(/^(quantite_|jour_retard_|retenue_|etat_materiel_)/)) {
-                if (input.value) {
-                    var val = input.value.toString().replace(',', '.').trim();
-                    var num = parseFloat(val);
-                    if (!isNaN(num)) {
-                        input.value = Math.floor(num);
-                    }
-                }
-            }
-        });
-        
-        return true;
+                });
+            });
+        }
     }
 
-    // Intercepter TOUS les clics sur les boutons submit
-    document.addEventListener('click', function(e) {
-        var target = e.target;
-        if (target.tagName === 'BUTTON' || target.tagName === 'INPUT') {
-            if (target.type === 'submit' || target.name === 'Submit2' || target.name === 'Submit') {
-                convertirTousLesChamps();
-            }
-        }
-    }, true);
-
-    // Intercepter la soumission du formulaire
-    document.addEventListener('submit', function(e) {
-        convertirTousLesChamps();
-    }, true);
-
-    // Au chargement, modifier le bouton
     document.addEventListener('DOMContentLoaded', function() {
-        var btn = document.querySelector('button[name="Submit2"]');
-        if(btn) {
-            btn.innerText = 'Enregistrer et Valider';
-            
-            // Ajouter un écouteur sur le bouton
-            btn.addEventListener('click', function(e) {
-                convertirTousLesChamps();
-            });
-        }
-        
-        // Chercher tous les boutons submit et ajouter l'écouteur
-        document.querySelectorAll('button[type="submit"], input[type="submit"], button[name="Submit2"], button[name="Submit"]').forEach(function(btn) {
-            btn.addEventListener('click', function(e) {
-                convertirTousLesChamps();
-            });
-        });
+        applyFormat();
+        document.querySelector('button[name="Submit2"]').innerText = 'Enregistrer et Valider';
     });
-
-    // Aussi intercepter via jQuery si disponible
-    if (typeof $ !== 'undefined') {
-        $(document).ready(function() {
-            $('form').on('submit', function() {
-                convertirTousLesChamps();
-            });
-            
-            $('button[name="Submit2"], button[name="Submit"], input[type="submit"]').on('click', function() {
-                convertirTousLesChamps();
-            });
-        });
-    }
 </script>
 <%
 } catch (Exception e) {

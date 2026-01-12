@@ -28,6 +28,7 @@
             <th>Quantité Besoin</th>
             <th>Quantité</th>
             <th>Lieu Stockage</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -56,6 +57,11 @@
                 </option>
               </select>
             </td>
+            <td>
+              <button class="btn btn-danger btn-sm" @click="supprimerLigne(index)">
+                <i class="fa fa-times"></i>
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -75,6 +81,9 @@
 </template>
 
 <script setup>
+function supprimerLigne(index) {
+  lignes.value.splice(index, 1)
+}
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getLivraisonFormulaire, validerLivraison } from '@/services/services.js'

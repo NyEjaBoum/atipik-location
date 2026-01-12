@@ -32,7 +32,7 @@ public class CheckinWS {
             Reservation mere = new Reservation();
             mere.setId(idresa);
 
-            // Récupérer les détails de la réservation sans checkin
+            // ✅ EXACTEMENT comme dans checkin-saisie.jsp ligne 30
             ReservationDetailsCheck[] res = mere.getListeSansCheckIn("RESTSANSCIGROUPLIB_SANS", c);
             
             if (res == null || res.length == 0) {
@@ -44,7 +44,7 @@ public class CheckinWS {
             
             int nombreLigne = res.length;
 
-            // Récupérer les infos client et réservation
+            // ✅ EXACTEMENT comme dans checkin-saisie.jsp ligne 22-28
             ReservationLib t = new ReservationLib();
             t.setNomTable("RESERVATION_LIB_MIN_DATYF");
             ReservationLib[] liste = (ReservationLib[]) CGenUtil.rechercher(t, null, null, c, " AND ID='" + idresa + "'");
@@ -55,9 +55,11 @@ public class CheckinWS {
                 }
             }
 
-            // Préparer le formulaire à retourner
+            // ✅ Préparer les données exactement comme dans le JSP
             List<Map<String, Object>> lignes = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            
+            // ✅ EXACTEMENT comme dans checkin-saisie.jsp ligne 94-109
             for (int i = 0; i < nombreLigne; i++) {
                 Map<String, Object> ligne = new HashMap<>();
                 ligne.put("idproduit", res[i].getIdproduit());
@@ -81,6 +83,11 @@ public class CheckinWS {
             result.put("lignes", lignes);
             result.put("nombreLigne", nombreLigne);
             result.put("idreservation", idresa);
+            
+            if (erreur) {
+                result.put("message", "Le reste à payer de cette réservation n'est pas nul");
+            }
+            
             return Response.ok(result).build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,64 +100,144 @@ public class CheckinWS {
     }
 
     @POST
-    @Path("/livraison-valider")
-    public Response validerLivraison(Map<String, Object> data, @Context HttpServletRequest request) {
-        Connection c = null;
-        try {
-            // ✅ Récupérer l'utilisateur depuis la session comme dans le JSP
-            HttpSession session = request.getSession();
-            user.UserEJB u = (user.UserEJB) session.getAttribute("u");
-            if (u == null || u.getUser() == null) {
-                return Response.status(401)
-                    .entity("{\"error\":\"Utilisateur non authentifié\"}")
-                    .build();
-            }
-            
-            c = new UtilDB().GetConn();
-            c.setAutoCommit(false);
-            
-            // Récupérer les données du formulaire
-            String idreservation = (String) data.get("idreservation");
-            List<Map<String, Object>> lignes = (List<Map<String, Object>>) data.get("lignes");
-
-            // ✅ Créer un tableau de CheckInLib comme dans apresMultipleCheckin.jsp
-            CheckInLib[] cfille = new CheckInLib[lignes.size()];
-            
-            for (int i = 0; i < lignes.size(); i++) {
-                Map<String, Object> ligne = lignes.get(i);
-                CheckInLib checkin = new CheckInLib();
-                checkin.setNomTable("CHECKIN");
-                
-                // ✅ Remplir les champs comme dans le JSP
-                checkin.setIdProduit((String) ligne.get("idproduit"));
-                checkin.setIdClient((String) ligne.get("idclient"));
-                checkin.setReservation((String) ligne.get("reservation"));
-                checkin.setQte(Double.parseDouble(ligne.get("qte").toString()));
-                checkin.setDaty(utilitaire.Utilitaire.string_date("dd/MM/yyyy", (String) ligne.get("daty")));
-                checkin.setResponsable((String) ligne.get("responsable"));
-                checkin.setImage((String) ligne.get("image"));
-                
-                cfille[i] = checkin;
-            }
-            
-            // ✅ Utiliser la même méthode que dans apresMultipleCheckin.jsp
-            Reservation reservation = new Reservation();
-            reservation.createObjectFilleMultipleSansMere(u, cfille);
-            
-            c.commit();
-            Map<String, Object> result = new HashMap<>();
-            result.put("success", true);
-            result.put("message", "Livraison enregistrée avec succès");
-            return Response.ok(result).build();
-        } catch (Exception e) {
-            if (c != null) try { c.rollback(); } catch (Exception ignore) {}
-            e.printStackTrace();
-            Map<String, Object> error = new HashMap<>();
-            error.put("success", false);
-            error.put("error", e.getMessage());
-            return Response.serverError().entity(error).build();
-        } finally {
-            if (c != null) try { c.close(); } catch (Exception ignore) {}
+@Path("/livraison-valider")
+public Response validerLivraison(Map<String, Object> data, @Context HttpServletRequest request) {
+    try {
+        HttpSession session = request.getSession();
+        user.UserEJB u = (user.UserEJB) session.getAttribute("u");
+        if (u == null || u.getUser() == null) {
+            return Response.status(401)
+                .entity("{\"error\":\"Utilisateur non authentifié\"}")
+                .build();
         }
+        
+        String idreservation = (String) data.get("idreservation");
+        List<Map<String, Object>> lignes = (List<Map<String, Object>>) data.get("lignes");
+
+        reservation.CheckInLib[] cfille = new reservation.CheckInLib[lignes.size()];
+        
+        for (int i = 0; i < lignes.size(); i++) {
+            Map<String, Object> ligne = lignes.get(i);
+            
+            reservation.CheckInLib checkin = new reservation.CheckInLib();
+            
+            checkin.setIdProduit((String) ligne.get("idproduit"));
+            checkin.setIdClient((String) ligne.get("idclient"));
+            checkin.setReservation((String) ligne.get("reservation"));
+            checkin.setQte(Double.parseDouble(ligne.get("qte").toString()));
+            checkin.setDaty(utilitaire.Utilitaire.string_date("dd/MM/yyyy", (String) ligne.get("daty")));
+            
+            // ✅ AJOUT : Référence produit (OBLIGATOIRE pour le CheckOut)
+            if (ligne.get("referenceproduit") != null) {
+                checkin.setRefproduit((String) ligne.get("referenceproduit"));
+            }
+            
+            if (ligne.get("heure") != null && !ligne.get("heure").toString().isEmpty()) {
+                checkin.setHeure((String) ligne.get("heure"));
+            }
+            
+            if (ligne.get("responsable") != null) {
+                checkin.setResponsable((String) ligne.get("responsable"));
+            }
+            
+            if (ligne.get("image") != null) {
+                checkin.setImage((String) ligne.get("image"));
+            }
+            
+            if (ligne.get("magasin") != null) {
+                checkin.setIdmagasin((String) ligne.get("magasin"));
+            }
+            
+            checkin.setNomTable("CHECKIN");
+            
+            cfille[i] = checkin;
+        }
+        
+        Reservation reservation = new Reservation();
+        reservation.createObjectFilleMultipleSansMere(u, cfille);
+        
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", true);
+        result.put("message", "Livraison enregistrée avec succès");
+        return Response.ok(result).build();
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+        Map<String, Object> error = new HashMap<>();
+        error.put("success", false);
+        error.put("error", e.getMessage());
+        return Response.serverError().entity(error).build();
     }
+}
+
+//     @POST
+// @Path("/livraison-valider")
+// public Response validerLivraison(Map<String, Object> data, @Context HttpServletRequest request) {
+//     try {
+//         HttpSession session = request.getSession();
+//         user.UserEJB u = (user.UserEJB) session.getAttribute("u");
+//         if (u == null || u.getUser() == null) {
+//             return Response.status(401)
+//                 .entity("{\"error\":\"Utilisateur non authentifié\"}")
+//                 .build();
+//         }
+        
+//         String idreservation = (String) data.get("idreservation");
+//         List<Map<String, Object>> lignes = (List<Map<String, Object>>) data.get("lignes");
+
+//         // ✅ Utiliser CheckInLib[] au lieu de Check[]
+//         reservation.CheckInLib[] cfille = new reservation.CheckInLib[lignes.size()];
+        
+//         for (int i = 0; i < lignes.size(); i++) {
+//             Map<String, Object> ligne = lignes.get(i);
+            
+//             // ✅ Créer CheckInLib (qui a setImage(), setIdclientlib(), etc.)
+//             reservation.CheckInLib checkin = new reservation.CheckInLib();
+            
+//             checkin.setIdProduit((String) ligne.get("idproduit"));
+//             checkin.setIdClient((String) ligne.get("idclient"));
+//             checkin.setReservation((String) ligne.get("reservation"));
+//             checkin.setQte(Double.parseDouble(ligne.get("qte").toString()));
+//             checkin.setDaty(utilitaire.Utilitaire.string_date("dd/MM/yyyy", (String) ligne.get("daty")));
+            
+//             if (ligne.get("heure") != null && !ligne.get("heure").toString().isEmpty()) {
+//                 checkin.setHeure((String) ligne.get("heure"));
+//             }
+            
+//             if (ligne.get("responsable") != null) {
+//                 checkin.setResponsable((String) ligne.get("responsable"));
+//             }
+            
+//             // ✅ Maintenant setImage() existe car CheckInLib l'a
+//             if (ligne.get("image") != null) {
+//                 checkin.setImage((String) ligne.get("image"));
+//             }
+            
+//             if (ligne.get("magasin") != null) {
+//                 checkin.setIdmagasin((String) ligne.get("magasin"));
+//             }
+            
+//             // ✅ Changer nomTable APRÈS avoir rempli les données
+//             checkin.setNomTable("CHECKIN");
+            
+//             cfille[i] = checkin;
+//         }
+        
+//         // ✅ Comme CheckInLib hérite de Check, ça fonctionnera
+//         Reservation reservation = new Reservation();
+//         reservation.createObjectFilleMultipleSansMere(u, cfille);
+        
+//         Map<String, Object> result = new HashMap<>();
+//         result.put("success", true);
+//         result.put("message", "Livraison enregistrée avec succès");
+//         return Response.ok(result).build();
+        
+//     } catch (Exception e) {
+//         e.printStackTrace();
+//         Map<String, Object> error = new HashMap<>();
+//         error.put("success", false);
+//         error.put("error", e.getMessage());
+//         return Response.serverError().entity(error).build();
+//     }
+// }
 }

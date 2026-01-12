@@ -25,6 +25,7 @@
             <th>Retenue (en %)</th>
             <th>Jour de retard</th>
             <th>Lieu de stockage</th>
+            <th>Action</th> <!-- Ajout colonne Action -->
           </tr>
         </thead>
         <tbody>
@@ -69,6 +70,11 @@
                   {{ mag.val }}
                 </option>
               </select>
+            </td>
+            <td>
+              <button class="btn btn-danger btn-sm" disabled>
+                <i class="fa fa-times"></i>
+              </button>
             </td>
           </tr>
         </tbody>
