@@ -81,6 +81,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import {
+  fetchCaisses,
+  fetchCautionStats,
+  fetchFormulaireMvtCaution,
+  postMvtCaisseCaution
+} from '@/services/services.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -112,23 +118,28 @@ const cautionStats = ref({
 async function loadCautionStats() {
   if (!form.value.idcaution) return
   try {
-    const resp = await fetch(`/asynclocation/api/caisse/caution-stats?idcaution=${form.value.idcaution}`)
-    const data = await resp.json()
-    cautionStats.value = data
+    cautionStats.value = await fetchCautionStats(form.value.idcaution)
   } catch (e) {
     console.error('Erreur chargement stats caution:', e)
   }
 }
 
 async function reloadForm() {
-  const resp = await fetch(`/asynclocation/api/caisse/formulaire-mvt-caution?idcaution=${form.value.idcaution}&idreservation=${form.value.idreservation}&type=${form.value.type}`)
-  const data = await resp.json()
-  Object.assign(form.value, data)
-  if (!form.value.daty) {
-    form.value.daty = todayISO()
+  try {
+    const data = await fetchFormulaireMvtCaution({
+      idcaution: form.value.idcaution,
+      idreservation: form.value.idreservation,
+      type: form.value.type
+    })
+    Object.assign(form.value, data)
+    if (!form.value.daty) {
+      form.value.daty = todayISO()
+    }
+    // Recharger les stats après avoir rechargé le formulaire
+    await loadCautionStats()
+  } catch (e) {
+    console.error('Erreur chargement formulaire:', e)
   }
-  // Recharger les stats après avoir rechargé le formulaire
-  await loadCautionStats()
 }
 
 onMounted(async () => {
@@ -139,8 +150,11 @@ onMounted(async () => {
   await reloadForm()
   await loadCautionStats()
 
-  const respCaisses = await fetch('/asynclocation/api/caisse/liste')
-  caisses.value = await respCaisses.json()
+  try {
+    caisses.value = await fetchCaisses()
+  } catch (e) {
+    console.error('Erreur chargement caisses:', e)
+  }
 })
 
 async function submitForm() {
@@ -162,12 +176,7 @@ async function submitForm() {
       idreservation: form.value.idreservation
     }
 
-    const resp = await fetch('/asynclocation/api/caisse/mvt-caution', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-    const result = await resp.json()
+    const result = await postMvtCaisseCaution(payload)
     if (result.success) {
       alert('Mouvement enregistré !')
       router.push('/reservation/fiche/' + form.value.idreservation)

@@ -41,6 +41,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { fetchCaisses, postMvtCaisseLocation } from '@/services/services.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -67,20 +68,17 @@ onMounted(async () => {
   form.value.tiers = route.query.tiers || ''
   form.value.designation = 'Payment facture ' + form.value.idOrigine
 
-  // Charger la liste des caisses
-  const respCaisses = await fetch('/asynclocation/api/caisse/liste')
-  caisses.value = await respCaisses.json()
+  try {
+    caisses.value = await fetchCaisses()
+  } catch (e) {
+    console.error('Erreur chargement caisses:', e)
+  }
 })
 
 async function submitForm() {
   try {
     const payload = { ...form.value }
-    const resp = await fetch('/asynclocation/api/caisse/mvt-location', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-    const result = await resp.json()
+    const result = await postMvtCaisseLocation(payload)
     if (result.success) {
       alert('Paiement enregistré !')
       router.push('/facture/fiche/' + form.value.idOrigine)

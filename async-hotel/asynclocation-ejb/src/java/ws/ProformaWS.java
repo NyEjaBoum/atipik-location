@@ -13,6 +13,7 @@ import java.util.Map;
 import bean.CGenUtil;
 import proforma.ProformaLib;
 import proforma.Proforma;
+import reservation.Reservation;
 import proforma.ProformaDetails;
 import proforma.ProformaDetailsLib;
 
@@ -44,25 +45,46 @@ public Response validerProforma(@PathParam("id") String id, @Context HttpServlet
         c = new UtilDB().GetConn();
         c.setAutoCommit(false);
 
-        // ✅ CORRECTION : Charger la proforma depuis la base avant de valider
+        // ✅ Utiliser la même logique que apresValiderProforma.jsp
         Proforma p = new Proforma();
-        p = (Proforma) p.getById(id, "PROFORMA", c);
-        if (p == null) {
-            return Response.status(404).entity("{\"error\":\"Proforma introuvable\"}").build();
+        p.setId(id);
+        
+        // Valider la proforma (crée la BC et la réservation)
+        Proforma proforma = (Proforma) p.validerObject(userId);
+        
+        c.commit();
+
+        // ✅ Récupérer la réservation créée et la vente générée
+        Reservation reservation = proforma.getReservationPF();
+        if (reservation == null) {
+            return Response.status(400)
+                .entity("{\"error\":\"Aucune réservation créée\"}")
+                .build();
         }
 
-        Object resultat = p.validerObject(userId, c);
-        c.commit();
+        vente.Vente vente = reservation.getVente(c);
+        if (vente == null) {
+            return Response.status(400)
+                .entity("{\"error\":\"Aucune vente créée\"}")
+                .build();
+        }
 
         Map<String, Object> response = new HashMap<>();
         response.put("success", true);
-        response.put("resultat", resultat);
+        response.put("proformaId", proforma.getId());
+        response.put("reservationId", reservation.getId());
+        response.put("venteId", vente.getId());
+        response.put("message", "Proforma validée et BC créée avec succès");
+        
         return Response.ok(response).build();
+
     } catch (Exception e) {
         if (c != null) try { c.rollback(); } catch (Exception ignore) {}
+        e.printStackTrace();
         Map<String, Object> error = new HashMap<>();
         error.put("success", false);
         error.put("error", e.getMessage());
+        error.put("type", e.getClass().getSimpleName());
         return Response.serverError().entity(error).build();
     } finally {
         if (c != null) try { c.close(); } catch (Exception ignore) {}

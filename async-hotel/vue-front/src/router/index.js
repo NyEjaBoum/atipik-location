@@ -5,11 +5,12 @@ import ProformaListeView from '@/views/proforma/ProformaListeView.vue'
 import ProformaFicheView from '@/views/proforma/ProformaFicheView.vue'
 import ReservationListeView from '@/views/reservation/ReservationListeView.vue'
 import ReservationFicheView from '@/views/reservation/ReservationFicheView.vue'
+import CheckinSaisieView from '@/views/reservation/CheckinSaisieView.vue'
 import MvtCaisseCautionSaisieView from '@/views/caisse/MvtCaisseCautionSaisieView.vue'
 import MvtCaisseLocationSaisieView from '@/views/caisse/MvtCaisseLocationSaisieView.vue'
 import VenteFicheView from '@/views/vente/VenteFicheView.vue'
 import MvtCaisseListeView from '@/views/caisse/MvtCaisseListeView.vue'
-
+import CheckoutSaisieView from '@/views/reservation/CheckoutSaisieView.vue'
 
 const routes = [
   {
@@ -38,6 +39,18 @@ const routes = [
   {
     path: '/reservation/fiche/:id',
     component: ReservationFicheView
+  },
+
+  {
+    path: '/reservation/checkin-saisie',
+    component: CheckinSaisieView,
+    name: 'CheckinSaisieView'
+  },
+  
+  {
+    path: '/reservation/checkout-saisie',
+    component: CheckoutSaisieView,
+    name: 'CheckoutSaisieView'
   },
 
   {

@@ -115,6 +115,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { fetchVenteFiche } from '@/services/services.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -126,8 +127,7 @@ const tab = ref('details')
 
 async function loadFiche() {
   try {
-    const resp = await fetch(`/asynclocation/api/vente/fiche/${route.params.id}`)
-    const data = await resp.json()
+    const data = await fetchVenteFiche(route.params.id)
     if (data.success === false) {
       error.value = data.error
     } else {

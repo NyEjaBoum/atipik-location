@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import { fetchMvtCaisseListe } from '@/services/services.js'
+
 const today = () => {
   const d = new Date();
   return d.toISOString().slice(0, 10);
@@ -74,17 +76,17 @@ export default {
   },
   methods: {
     async fetchData() {
-      const params = new URLSearchParams();
-      if (this.etat) params.append("etat", this.etat);
-      if (this.designation) params.append("designation", this.designation);
-      if (this.daty1) params.append("daty1", this.daty1);
-      if (this.daty2) params.append("daty2", this.daty2);
-      const res = await fetch(`/asynclocation/api/caisse/mvt-caisse-liste?${params.toString()}`);
-      if (!res.ok) {
+      try {
+        this.mouvements = await fetchMvtCaisseListe({
+          etat: this.etat,
+          designation: this.designation,
+          daty1: this.daty1,
+          daty2: this.daty2
+        });
+      } catch (e) {
+        console.error('Erreur:', e);
         this.mouvements = [];
-        return;
       }
-      this.mouvements = await res.json();
     }
   },
   mounted() {
