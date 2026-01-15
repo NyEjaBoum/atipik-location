@@ -29,6 +29,107 @@ import produits.IngredientsLib;
 public class ProformaWS {
 
 
+// ...existing code...
+
+    @GET
+    @Path("/produits-disponibles")
+    public Response getProduitsDisponibles(
+            @QueryParam("dateDebut") String dateDebut,
+            @QueryParam("dateFin") String dateFin,
+            @Context HttpServletRequest request) {
+        Connection c = null;
+        try {
+            c = new UtilDB().GetConn();
+            
+            // Vérifier que les dates sont fournies
+            if (dateDebut == null || dateDebut.isEmpty() || dateFin == null || dateFin.isEmpty()) {
+                return Response.status(400)
+                    .entity("{\"error\":\"dateDebut et dateFin sont obligatoires (format: YYYY-MM-DD)\"}")
+                    .build();
+            }
+            
+            // Calculer le nombre de jours entre les deux dates
+            java.sql.Date debut = java.sql.Date.valueOf(dateDebut);
+            java.sql.Date fin = java.sql.Date.valueOf(dateFin);
+            long nbJours = (fin.getTime() - debut.getTime()) / (1000 * 60 * 60 * 24);
+            
+            // Récupérer tous les produits (non endommagés)
+            IngredientsLib crit = new IngredientsLib();
+            crit.setNomTable("ST_INGREDIENTSAUTOVENTE_MIMAGE");
+            
+            IngredientsLib[] produits = (IngredientsLib[]) CGenUtil.rechercher(crit, null, null, c, "");
+            
+            List<Map<String, Object>> result = new ArrayList<>();
+            
+            for (IngredientsLib p : produits) {
+                // Vérifier la disponibilité du produit pour chaque jour de la période
+                boolean disponible = true;
+                double qteDisponibleMin = Double.MAX_VALUE;
+                
+                for (long i = 0; i <= nbJours; i++) {
+                    java.sql.Date dateTest = new java.sql.Date(debut.getTime() + (i * 24 * 60 * 60 * 1000));
+                    
+                    // Utiliser la méthode checkDisponibilite de la classe Ingredients
+                    produits.Ingredients ing = new produits.Ingredients();
+                    ing.setId(p.getId());
+                    produits.Ingredients[] ings = (produits.Ingredients[]) CGenUtil.rechercher(ing, null, null, c, "");
+                    
+                    if (ings != null && ings.length > 0) {
+                        double qteDispo = ings[0].checkDisponibilite(c, dateTest);
+                        if (qteDispo < qteDisponibleMin) {
+                            qteDisponibleMin = qteDispo;
+                        }
+                        if (qteDispo <= 0) {
+                            disponible = false;
+                            break;
+                        }
+                    } else {
+                        disponible = false;
+                        break;
+                    }
+                }
+                
+                // Ajouter le produit uniquement s'il est disponible sur toute la période
+                if (disponible && qteDisponibleMin > 0) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", p.getId());
+                    map.put("libelle", p.getLibelle());
+                    map.put("reference", p.getReference());
+                    // ✅ FIX : Utiliser le bon nom de méthode
+                    map.put("categorie", p.getCategorieIngredient()); // Majuscule sur 'I'
+                    map.put("pu", p.getPu());
+                    map.put("unite", p.getUnite());
+                    map.put("image", p.getImage());
+                    map.put("dateDebut", dateDebut);
+                    map.put("dateFin", dateFin);
+                    map.put("nbJours", nbJours);
+                    map.put("qteDisponible", (int) qteDisponibleMin);
+                    result.add(map);
+                }
+            }
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("data", result);
+            response.put("total", result.size());
+            response.put("dateDebut", dateDebut);
+            response.put("dateFin", dateFin);
+            response.put("nbJours", nbJours);
+            
+            return Response.ok(response).build();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            error.put("type", e.getClass().getSimpleName());
+            return Response.serverError().entity(error).build();
+        } finally {
+            if (c != null) try { c.close(); } catch (Exception ex) {}
+        }
+    }
+
+// ...existing code...
+
 @POST
 @Path("/valider/{id}")
 @Consumes(MediaType.APPLICATION_JSON)

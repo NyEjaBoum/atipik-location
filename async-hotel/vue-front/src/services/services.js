@@ -159,3 +159,15 @@ export async function validerReception(data) {
     })
     return await res.json()
 }
+
+
+export async function getProduitsDisponibles(dateDebut, dateFin) {
+  const response = await fetch(
+    `/asynclocation/api/proforma/produits-disponibles?dateDebut=${dateDebut}&dateFin=${dateFin}`
+  )
+  if (!response.ok) {
+    const error = await response.json()
+    throw new Error(error.error || 'Erreur lors du chargement des produits')
+  }
+  return await response.json()
+}

@@ -11,6 +11,7 @@ import MvtCaisseLocationSaisieView from '@/views/caisse/MvtCaisseLocationSaisieV
 import VenteFicheView from '@/views/vente/VenteFicheView.vue'
 import MvtCaisseListeView from '@/views/caisse/MvtCaisseListeView.vue'
 import CheckoutSaisieView from '@/views/reservation/CheckoutSaisieView.vue'
+import ProduitsDisponiblesView from '@/views/produits/ProduitsDisponiblesView.vue'
 
 const routes = [
   {
@@ -75,6 +76,12 @@ const routes = [
     path: '/vente/fiche/:id',
     component: VenteFicheView,
     name: 'VenteFicheView'
+  },
+
+  {
+    path: '/produits/disponibles',
+    component: ProduitsDisponiblesView,
+    name: 'ProduitsDisponibles'
   }
 ]
 

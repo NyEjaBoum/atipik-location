@@ -25,7 +25,7 @@
             <th>Retenue (en %)</th>
             <th>Jour de retard</th>
             <th>Lieu de stockage</th>
-            <th>Action</th> <!-- Ajout colonne Action -->
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -51,7 +51,7 @@
                 class="form-control" 
                 min="0" 
                 max="100"
-                readonly 
+                 
               />
             </td>
             <td>
@@ -72,7 +72,8 @@
               </select>
             </td>
             <td>
-              <button class="btn btn-danger btn-sm" disabled>
+              <!-- ✅ Retirer disabled et ajouter @click -->
+              <button class="btn btn-danger btn-sm" @click="supprimerLigne(index)">
                 <i class="fa fa-times"></i>
               </button>
             </td>
@@ -109,6 +110,11 @@ const magasins = ref([])
 const submitting = ref(false)
 const message = ref('')
 const messageClass = ref('')
+
+// ✅ Ajouter la fonction supprimerLigne (comme dans CheckinSaisieView)
+function supprimerLigne(index) {
+  lignes.value.splice(index, 1)
+}
 
 function calculerRetenue(index) {
   const ligne = lignes.value[index]
